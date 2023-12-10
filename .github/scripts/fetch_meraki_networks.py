@@ -1,8 +1,8 @@
-import requests
 import os
+import requests
 
-def fetch_meraki_networks(api_key):
-    url = "https://api.meraki.com/api/v0/organizations"
+def fetch_meraki_networks(api_key, org_id):
+    url = f"https://api.meraki.com/api/v0/organizations/{org_id}/networks"
     
     headers = {
         "X-Cisco-Meraki-API-Key": api_key,
@@ -11,29 +11,19 @@ def fetch_meraki_networks(api_key):
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        organizations = response.json()
-        for org in organizations:
-            org_id = org["id"]
-            org_name = org["name"]
-            
-            networks_url = f"https://api.meraki.com/api/v0/organizations/{org_id}/networks"
-            networks_response = requests.get(networks_url, headers=headers)
-
-            if networks_response.status_code == 200:
-                networks = networks_response.json()
-                print(f"Organization: {org_name}")
-                print("Networks:")
-                for network in networks:
-                    print(f"  - {network['name']}")
-            else:
-                print(f"Failed to fetch networks for organization {org_name}")
-
+        networks = response.json()
+        print(f"Organization ID: {org_id}")
+        print("Networks:")
+        for network in networks:
+            print(f"  - {network['name']}")
     else:
-        print("Failed to fetch organizations")
+        print(f"Failed to fetch networks for organization ID {org_id}")
 
 if __name__ == "__main__":
     meraki_api_key = os.environ.get("MERAKI_API_KEY")
-    if meraki_api_key:
-        fetch_meraki_networks(meraki_api_key)
+    org_id = os.environ.get("ORG_ID")
+
+    if not meraki_api_key or not org_id:
+        print("Meraki API key or organization ID not provided.")
     else:
-        print("Meraki API key not provided.")
+        fetch_meraki_networks(meraki_api_key, org_id)
