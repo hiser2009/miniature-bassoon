@@ -1,9 +1,8 @@
 import os
 import requests
 
-
 def fetch_meraki_networks(api_key, org_id):
-    url = f"https://api.meraki.com/api/v0/organizations/1503418/networks"
+    url = f"https://api.meraki.com/api/v0/organizations/{org_id}/networks"
     
     headers = {
         "X-Cisco-Meraki-API-Key": api_key,
@@ -16,7 +15,7 @@ def fetch_meraki_networks(api_key, org_id):
         print(f"Organization ID: {org_id}")
         print("Networks:")
         for network in networks:
-            print(f"  - {network['name']}")
+            print(f"  - {network['name']} (ID: {network['id']})")
     else:
         print(f"Failed to fetch networks for organization ID {org_id}")
 
