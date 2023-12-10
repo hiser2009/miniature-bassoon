@@ -16,8 +16,8 @@ jobs:
       - run:
           name: Fetch Meraki Networks
           command: |
-            #python .github/scripts/fetch_meraki_networks.py
-            python .github/scripts/test.py
+            python .github/scripts/fetch_meraki_networks.py
+            #python .github/scripts/test.py
           # environment:
           #   MERAKI_API_KEY: $MERAKI_API_KEY
           #   ORG_ID: $ORG_ID
