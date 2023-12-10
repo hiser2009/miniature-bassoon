@@ -1,8 +1,9 @@
 import os
 import requests
 
+
 def fetch_meraki_networks(api_key, org_id):
-    url = f"https://api.meraki.com/api/v0/organizations/{org_id}/networks"
+    url = f"https://api.meraki.com/api/v0/organizations/1503418/networks"
     
     headers = {
         "X-Cisco-Meraki-API-Key": api_key,
