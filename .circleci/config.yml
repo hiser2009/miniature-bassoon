@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   fetch-meraki-networks:
     docker:
-      - image: cimg/python:3.12.1
+      - image: circleci/python:3.x
 
     steps:
       - checkout
@@ -19,6 +19,7 @@ jobs:
             python .github/scripts/fetch_meraki_networks.py
           environment:
             MERAKI_API_KEY: $MERAKI_API_KEY
+            ORG_ID: $ORG_ID
 
 workflows:
   my-workflow:
