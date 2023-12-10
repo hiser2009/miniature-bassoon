@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   fetch-meraki-networks:
     docker:
-      - image: circleci/python:3.x
+      - image: circleci/python:3.8.15
 
     steps:
       - checkout
