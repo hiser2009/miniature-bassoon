@@ -1,0 +1,28 @@
+version: 2.1
+
+jobs:
+  fetch-meraki-networks:
+    docker:
+      - image: circleci/python:3.x
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install Dependencies
+          command: |
+            pip install requests
+
+      - run:
+          name: Fetch Meraki Networks
+          command: |
+            python .github/scripts/fetch_meraki_networks.py
+          environment:
+            MERAKI_API_KEY: $MERAKI_API_KEY
+
+workflows:
+  my-workflow:
+    jobs:
+      - fetch-meraki-networks:
+          context:
+            - meraki_stuff
