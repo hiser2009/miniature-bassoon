@@ -16,7 +16,8 @@ headers = {
 data_create_network = {
     "name": "Dev Network",
     "type": "appliance",
-    "timeZone": "America/New_York"
+    "timeZone": "America/New_York",
+    "productTypes": ["appliance"]  # Add this line to specify the product type
 }
 response_create_network = requests.post(url_create_network, headers=headers, json=data_create_network)
 print("Create Network Response:")
