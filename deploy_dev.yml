@@ -6,7 +6,7 @@
   vars:
     meraki_api_key: "{{ lookup('env', 'MERAKI_API_KEY') }}"
     org_id: "{{ lookup('env', 'ORG_ID') }}"
-    dev_network_id: "Nashville_TN_Branch"
+    dev_network_id: Nashville_TN_Branch
 
   tasks:
     - name: Debug Variables
