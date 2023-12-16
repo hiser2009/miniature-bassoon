@@ -12,6 +12,7 @@ jobs:
           name: Install Dependencies
           command: |
             pip install requests
+            pip install meraki
       
       - run:
           name: Create Meraki Networks
