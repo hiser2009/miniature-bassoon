@@ -17,12 +17,12 @@ jobs:
           name: Create Meraki Networks
           command: |
             python test.py
-            #python .github/scripts/test.py
+            #python test.py
 
       - run:
           name: Fetch Meraki Networks
           command: |
-            python .github/scripts/fetch_meraki_networks.py
+            python fetch_meraki_networks.py
             #python .github/scripts/test.py
 
 
