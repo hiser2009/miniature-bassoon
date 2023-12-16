@@ -9,27 +9,94 @@
     dev_network_id: Nashville_TN_Branch  # Manually set the value
 
   tasks:
-    - name: Debug Variables
-      debug:
-        msg:
-          - "Meraki API Key: {{ lookup('env', 'MERAKI_API_KEY') }}"
-          - "Organization ID: {{ lookup('env', 'ORG_ID') }}"
-          - "Dev Network ID: {{ dev_network_id }}"
-      vars:
-        dev_network_id: "Nashville_TN_Branch"  # Manually set the value
-
     - name: Create Dev network
-      debug:
-        var:
-          - "url"
-          - "headers"
-      vars:
+      uri:
         url: "https://api.meraki.com/api/v1/organizations/{{ org_id }}/networks"
+        method: POST
         headers:
           Content-Type: "application/json"
           X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
+        body_format: json
+        body:
+          name: "Dev Network"
+          type: "switch"
+          timeZone: "America/New_York"
+        status_code: 201
+      register: dev_network_response
 
-    # Continue with the rest of your tasks...
+    - name: Print Dev network creation status
+      debug:
+        var: dev_network_response.json
+
+    - name: Create VLANs and DHCP scopes
+      vars:
+        subnets:
+          - id: 100
+            vlan_name: "Voice"
+            subnet: "192.168.100.0/24"
+          - id: 200
+            vlan_name: "Data"
+            subnet: "192.168.200.0/24"
+          - id: 300
+            vlan_name: "Infra"
+            subnet: "192.168.300.0/24"
+          - id: 400
+            vlan_name: "Guest"
+            subnet: "192.168.400.0/24"
+      uri:
+        url: "https://api.meraki.com/api/v1/networks/{{ dev_network_id }}/vlans"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
+        body_format: json
+        body:
+          name: "{{ item.vlan_name }}"
+          subnet: "{{ item.subnet }}"
+        status_code: 201
+      with_items: "{{ subnets }}"
+      register: vlan_response
+
+    - name: Print VLAN creation status
+      debug:
+        var: vlan_response.results
+
+    - name: Create DHCP scopes
+      vars:
+        dhcp_scopes:
+          - vlan_name: "Voice"
+            subnet: "192.168.100.0/24"
+            start_ip: "192.168.100.100"
+            end_ip: "192.168.100.200"
+          - vlan_name: "Data"
+            subnet: "192.168.200.0/24"
+            start_ip: "192.168.200.100"
+            end_ip: "192.168.200.200"
+          - vlan_name: "Infra"
+            subnet: "192.168.300.0/24"
+            start_ip: "192.168.300.100"
+            end_ip: "192.168.300.200"
+          - vlan_name: "Guest"
+            subnet: "192.168.400.0/24"
+            start_ip: "192.168.400.100"
+            end_ip: "192.168.400.200"
+      uri:
+        url: "https://api.meraki.com/api/v1/networks/{{ dev_network_id }}/dhcp/scopes"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
+        body_format: json
+        body: "{{ item }}"
+        status_code: 201
+      with_items: "{{ dhcp_scopes }}"
+      register: dhcp_response
+
+    - name: Print DHCP scope creation status
+      debug:
+        var: dhcp_response.results
+
+    # Add additional tasks for traffic shaping rules, etc.
     # ...
 
     - name: Print success message
