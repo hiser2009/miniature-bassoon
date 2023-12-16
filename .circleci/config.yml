@@ -26,6 +26,7 @@ workflows:
   deploy_workflow:
     jobs:
       - deploy_dev:
+          context: meraki_stuff
           filters:
             branches:
               only:
