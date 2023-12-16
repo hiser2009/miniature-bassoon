@@ -14,7 +14,7 @@ headers = {
     "X-Cisco-Meraki-API-Key": meraki_api_key
 }
 data_create_network = {
-    "name": "Dev Network",
+    "name": "Nashville_TN_Branch",
     "type": "appliance",
     "timeZone": "America/New_York",
     "productTypes": ["appliance"]  # Add this line to specify the product type
