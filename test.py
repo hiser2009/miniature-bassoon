@@ -15,7 +15,7 @@ headers = {
 }
 data_create_network = {
     "name": "Dev Network",
-    "type": "switch",
+    "type": "appliance",
     "timeZone": "America/New_York"
 }
 response_create_network = requests.post(url_create_network, headers=headers, json=data_create_network)
