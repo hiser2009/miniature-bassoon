@@ -6,58 +6,47 @@ ORG_ID = os.getenv('ORG_ID')  # Use your environment variable
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
-# Create network
-network = dashboard.organizations.createOrganizationNetwork(
-    ORG_ID,
-    name='Orlando_FL_Branch',
-    type='combined',
-    timeZone='America/New_York',
-    productTypes=['appliance', 'switch', 'wireless']
-)
+# Check if the network already exists
+networks = dashboard.organizations.getOrganizationNetworks(ORG_ID)
 
-# Extract the network ID
-network_id = network['id']
-print(f"Network ID: {network_id}")
+network_name = 'Orlando_FL_Branch'
+existing_network = next((n for n in networks if n['name'] == network_name), None)
 
-# Define VLAN data
-vlan_data = {
-    "name": "Voice",
-    "subnet": "192.168.100.0/24",
-    "applianceIp": "192.168.100.1",
-    "groupPolicyId": "101",
-    "templateVlanType": "same",
-    "cidr": "192.168.100.0/24",
-    "mask": 24,
-    "fixedIpAssignments": {
-        "22:33:44:55:66:77": {
-            "ip": "1.2.3.4",
-            "name": "Some client name"
-        }
-    },
-    "reservedIpRanges": [
-        {
-            "start": "192.168.1.1",
-            "end": "192.168.1.100",
-            "comment": "A reserved IP range"
-        }
-    ],
-    "dnsNameservers": "google_dns",
-    "dhcpHandling": "Run a DHCP server",
-    "dhcpLeaseTime": "4 hours",
-    "dhcpBootOptionsEnabled": False,
-    "dhcpBootNextServer": "1.2.3.4",
-    "dhcpBootFilename": "sample.file",
-    "dhcpOptions": [
-        {
-            "code": "5",
-            "type": "text",
-            "value": "five"
-        }
-    ],
-    "adaptivePolicyGroupId": "1234",
-    "dhcpRelayServerIps": ["192.168.1.1/24"],
-    "vpnNatSubnet": "192.168.100.0/24"
-}
+if existing_network:
+    # Network already exists, update VLAN
+    network_id = existing_network['id']
+    print(f"Network ID: {network_id}")
 
-# Create VLAN
-response_vlan = dashboard
+    vlan_data = {
+        # ... VLAN data as before ...
+    }
+
+    # Update VLAN
+    response_vlan = dashboard.appliance.updateNetworkApplianceVlan(network_id, vlan_id='', **vlan_data)
+
+    print("Update VLAN Response:")
+    print(response_vlan)
+
+else:
+    # Network does not exist, create network and VLAN
+    network = dashboard.organizations.createOrganizationNetwork(
+        ORG_ID,
+        name=network_name,
+        type='combined',
+        timeZone='America/New_York',
+        productTypes=['appliance', 'switch', 'wireless']
+    )
+
+    # Extract the network ID
+    network_id = network['id']
+    print(f"Network ID: {network_id}")
+
+    vlan_data = {
+        # ... VLAN data as before ...
+    }
+
+    # Create VLAN
+    response_vlan = dashboard.appliance.createNetworkApplianceVlan(network_id, **vlan_data)
+
+    print("Create VLAN Response:")
+    print(response_vlan)
