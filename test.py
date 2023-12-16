@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import time  # Added import for time
 
 # Replace these values with your actual Meraki API key and organization ID
 meraki_api_key = os.getenv("MERAKI_API_KEY")
@@ -32,6 +33,9 @@ dev_network_id = response_data_create_network.get('id')
 if dev_network_id:
     print(f"Dev Network ID: {dev_network_id}")
 
+    # Add a delay to allow time for the network to be ready
+    time.sleep(5)  # Adjust the delay time as needed
+
     # Create VLANs
     subnets = [
         {"id": 100, "vlan_name": "Voice", "subnet": "192.168.100.0/24"},
@@ -53,7 +57,7 @@ if dev_network_id:
     
     # Continue with other tasks...
     # ...
-    
+
     print("Dev deployment successful!")
 
 else:
