@@ -2,7 +2,6 @@ import requests
 import json
 import os
 import time
-import meraki
 
 # Replace these values with your actual Meraki API key and organization ID
 meraki_api_key = os.getenv("MERAKI_API_KEY")
@@ -37,29 +36,76 @@ if dev_network_id:
     # Add a delay to allow time for the network to be ready
     time.sleep(5)  # Adjust the delay time as needed
 
-    # Use meraki library to create VLANs and DHCP scopes
-    dashboard = meraki.DashboardAPI(meraki_api_key)
+    # Use requests library to create VLANs and DHCP scopes
+    url_create_vlans = f"https://api.meraki.com/api/v1/networks/{dev_network_id}/appliance/vlans"
+    payload_vlans = '''{
+        "name": "My VLAN",
+        "applianceIp": "192.168.1.2",
+        "subnet": "192.168.1.0/24",
+        "groupPolicyId": "101",
+        "templateVlanType": "same",
+        "cidr": "192.168.1.0/24",
+        "mask": 28,
+        "fixedIpAssignments": {
+            "22:33:44:55:66:77": {
+                "ip": "1.2.3.4",
+                "name": "Some client name"
+            }
+        },
+        "reservedIpRanges": [
+            {
+                "start": "192.168.1.0",
+                "end": "192.168.1.1",
+                "comment": "A reserved IP range"
+            }
+        ],
+        "dnsNameservers": "google_dns",
+        "dhcpHandling": "Run a DHCP server",
+        "dhcpLeaseTime": "1 day",
+        "dhcpBootOptionsEnabled": false,
+        "dhcpBootNextServer": "1.2.3.4",
+        "dhcpBootFilename": "sample.file",
+        "dhcpOptions": [
+            {
+                "code": "5",
+                "type": "text",
+                "value": "five"
+            }
+        ],
+        "ipv6": {
+            "enabled": true,
+            "prefixAssignments": [
+                {
+                    "autonomous": false,
+                    "staticPrefix": "2001:db8:3c4d:15::/64",
+                    "staticApplianceIp6": "2001:db8:3c4d:15::1",
+                    "origin": {
+                        "type": "internet",
+                        "interfaces": ["wan0"]
+                    }
+                }
+            ]
+        },
+        "mandatoryDhcp": {"enabled": true},
+        "adaptivePolicyGroupId": "1234",
+        "dhcpRelayServerIps": [
+            "192.168.1.0/24",
+            "192.168.128.0/24"
+        ],
+        "vpnNatSubnet": "192.168.1.0/24"
+    }'''
 
-    subnets = [
-        {"id": 100, "vlan_name": "Voice", "subnet": "192.168.100.0/24"},
-        {"id": 200, "vlan_name": "Data", "subnet": "192.168.200.0/24"},
-        {"id": 300, "vlan_name": "Infra", "subnet": "192.168.300.0/24"},
-        {"id": 400, "vlan_name": "Guest", "subnet": "192.168.400.0/24"}
-    ]
+    headers_vlans = {
+        "Authorization": f"Bearer {meraki_api_key}",
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    }
 
-    for subnet in subnets:
-        # Use the meraki library to create VLANs
-        response_create_vlan = dashboard.appliance.updateNetworkApplianceVlan(
-            dev_network_id,
-            vlan_id='',  # Set the VLAN ID to an empty string for creation
-            name=subnet["vlan_name"],
-            subnet=subnet["subnet"]
-            # Add other parameters as needed
-        )
-        print(f"Create VLAN {subnet['vlan_name']} Response:")
-        print(f"Status Code: {response_create_vlan.status_code}")
-        print("Response JSON:")
-        print(response_create_vlan)
+    response_vlans = requests.put(url_create_vlans, headers=headers_vlans, data=payload_vlans)
+    print("Create VLANs Response:")
+    print(f"Status Code: {response_vlans.status_code}")
+    print("Response JSON:")
+    print(response_vlans.text.encode('utf8'))
 
     # Continue with other tasks...
     # ...
