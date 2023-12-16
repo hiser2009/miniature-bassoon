@@ -20,7 +20,8 @@ if existing_network:
     vlan_data = {
         # ... VLAN data as before ...
     }
-
+    # Enable VLANs for the network
+    dashboard.appliance.updateNetworkApplianceSettings(network_id, vlansEnabled=True)
     # Update VLAN
     response_vlan = dashboard.appliance.createNetworkApplianceVlan(network_id, id='100', name='voice')
 
