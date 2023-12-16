@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import time
+import meraki
 
 # Replace these values with your actual Meraki API key and organization ID
 meraki_api_key = os.getenv("MERAKI_API_KEY")
@@ -36,46 +37,29 @@ if dev_network_id:
     # Add a delay to allow time for the network to be ready
     time.sleep(5)  # Adjust the delay time as needed
 
-    # Create or Update VLANs
+    # Use meraki library to create VLANs and DHCP scopes
+    dashboard = meraki.DashboardAPI(meraki_api_key)
+
     subnets = [
         {"id": 100, "vlan_name": "Voice", "subnet": "192.168.100.0/24"},
         {"id": 200, "vlan_name": "Data", "subnet": "192.168.200.0/24"},
         {"id": 300, "vlan_name": "Infra", "subnet": "192.168.300.0/24"},
         {"id": 400, "vlan_name": "Guest", "subnet": "192.168.400.0/24"}
     ]
-    url_create_vlans = f"https://api.meraki.com/api/v1/networks/{dev_network_id}/vlans"
+
     for subnet in subnets:
-        data_create_vlan = {
-            "name": subnet["vlan_name"],
-            "subnet": subnet["subnet"]
-        }
-
-        # Check if the VLAN already exists by name
-        url_get_vlan = f"https://api.meraki.com/api/v1/networks/{dev_network_id}/vlans"
-        response_get_vlans = requests.get(url_get_vlan, headers=headers)
-        existing_vlans = response_get_vlans.json()
-        existing_vlan = next((vlan for vlan in existing_vlans if vlan["name"] == subnet["vlan_name"]), None)
-
-        if existing_vlan:
-            # Update the existing VLAN
-            url_update_vlan = f"https://api.meraki.com/api/v1/networks/{dev_network_id}/vlans/{existing_vlan['id']}"
-            response_update_vlan = requests.put(url_update_vlan, headers=headers, json=data_create_vlan)
-            print(f"Update VLAN {subnet['vlan_name']} Response:")
-        else:
-            # Create the VLAN if it doesn't exist
-            response_create_vlan = requests.post(url_create_vlans, headers=headers, json=data_create_vlan)
-            print(f"Create VLAN {subnet['vlan_name']} Response:")
-
+        # Use the meraki library to create VLANs
+        response_create_vlan = dashboard.appliance.updateNetworkApplianceVlan(
+            dev_network_id,
+            vlan_id='',  # Set the VLAN ID to an empty string for creation
+            name=subnet["vlan_name"],
+            subnet=subnet["subnet"]
+            # Add other parameters as needed
+        )
+        print(f"Create VLAN {subnet['vlan_name']} Response:")
         print(f"Status Code: {response_create_vlan.status_code}")
-        try:
-            # Print the response content
-            print("Response Content:")
-            print(response_create_vlan.text)
-            # Attempt to parse the JSON response
-            print("Response JSON:")
-            print(response_create_vlan.json())
-        except json.decoder.JSONDecodeError as e:
-            print(f"Error decoding JSON: {e}")
+        print("Response JSON:")
+        print(response_create_vlan)
 
     # Continue with other tasks...
     # ...
