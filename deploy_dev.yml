@@ -11,31 +11,28 @@
   tasks:
     - name: Debug Variables
       debug:
-        msg:
-          - "Meraki API Key: {{ lookup('env', 'MERAKI_API_KEY') }}"
-          - "Organization ID: {{ lookup('env', 'ORG_ID') }}"
-          - "Dev Network ID: {{ dev_network_id }}"
+        var:
+          - "meraki_api_key"
+          - "org_id"
+          - "dev_network_id"
+      vars:
+        meraki_api_key: "{{ lookup('env', 'MERAKI_API_KEY') }}"
+        org_id: "{{ lookup('env', 'ORG_ID') }}"
+        dev_network_id: "Nashville_TN_Branch"  # Manually set the value
 
     - name: Create Dev network
-      uri:
+      debug:
+        var:
+          - "url"
+          - "headers"
+      vars:
         url: "https://api.meraki.com/api/v1/organizations/{{ org_id }}/networks"
-        method: POST
         headers:
           Content-Type: "application/json"
           X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
-        body_format: json
-        body:
-          name: "Dev Network"
-          type: "appliance"  # Set the type to "appliance" for Meraki MX Firewalls
-          timeZone: "America/New_York"
-        status_code: 201
-      register: dev_network_response
 
-    - name: Print Dev network creation status
-      debug:
-        var: dev_network_response.json
-
-    # Add the rest of your tasks...
+    # Continue with the rest of your tasks...
+    # ...
 
     - name: Print success message
       debug:
