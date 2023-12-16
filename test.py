@@ -5,7 +5,7 @@ import os
 # Replace these values with your actual Meraki API key and organization ID
 meraki_api_key = os.getenv("MERAKI_API_KEY")
 org_id = os.getenv("ORG_ID")
-dev_network_name = "Nashville_TN_Branch"  # Manually set the value
+dev_network_name = "Orlando_FL_Branch"  # Manually set the value
 
 # Create Dev network
 url_create_network = f"https://api.meraki.com/api/v1/organizations/{org_id}/networks"
@@ -15,7 +15,7 @@ headers = {
 }
 data_create_network = {
     "name": dev_network_name,
-    "type": "appliance",
+    "type": "combined",
     "timeZone": "America/New_York"
 }
 response_create_network = requests.post(url_create_network, headers=headers, json=data_create_network)
