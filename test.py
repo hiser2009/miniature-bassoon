@@ -37,11 +37,11 @@ if dev_network_id:
     time.sleep(5)  # Adjust the delay time as needed
 
     # Use requests library to create VLANs and DHCP scopes
-    url_create_vlans = f"https://api.meraki.com/api/v1/networks/{dev_network_id}/appliance/vlans"
-    payload_vlans = '''{
+    url_create_vlans = f"https://api.meraki.com/api/v1/networks/{dev_network_id}/vlans"
+    payload_vlans = {
         "name": "My VLAN",
-        "applianceIp": "192.168.1.2",
         "subnet": "192.168.1.0/24",
+        "applianceIp": "192.168.1.2",
         "groupPolicyId": "101",
         "templateVlanType": "same",
         "cidr": "192.168.1.0/24",
@@ -62,7 +62,7 @@ if dev_network_id:
         "dnsNameservers": "google_dns",
         "dhcpHandling": "Run a DHCP server",
         "dhcpLeaseTime": "1 day",
-        "dhcpBootOptionsEnabled": false,
+        "dhcpBootOptionsEnabled": False,
         "dhcpBootNextServer": "1.2.3.4",
         "dhcpBootFilename": "sample.file",
         "dhcpOptions": [
@@ -73,10 +73,10 @@ if dev_network_id:
             }
         ],
         "ipv6": {
-            "enabled": true,
+            "enabled": True,
             "prefixAssignments": [
                 {
-                    "autonomous": false,
+                    "autonomous": False,
                     "staticPrefix": "2001:db8:3c4d:15::/64",
                     "staticApplianceIp6": "2001:db8:3c4d:15::1",
                     "origin": {
@@ -86,14 +86,14 @@ if dev_network_id:
                 }
             ]
         },
-        "mandatoryDhcp": {"enabled": true},
+        "mandatoryDhcp": {"enabled": True},
         "adaptivePolicyGroupId": "1234",
         "dhcpRelayServerIps": [
             "192.168.1.0/24",
             "192.168.128.0/24"
         ],
         "vpnNatSubnet": "192.168.1.0/24"
-    }'''
+    }
 
     headers_vlans = {
         "Authorization": f"Bearer {meraki_api_key}",
@@ -101,7 +101,7 @@ if dev_network_id:
         "Accept": "application/json"
     }
 
-    response_vlans = requests.put(url_create_vlans, headers=headers_vlans, data=payload_vlans)
+    response_vlans = requests.post(url_create_vlans, headers=headers_vlans, json=payload_vlans)
     print("Create VLANs Response:")
     print(f"Status Code: {response_vlans.status_code}")
     print("Response JSON:")
