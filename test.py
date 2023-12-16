@@ -52,9 +52,16 @@ if dev_network_id:
         response_create_vlan = requests.post(url_create_vlans, headers=headers, json=data_create_vlan)
         print(f"Create VLAN {subnet['vlan_name']} Response:")
         print(f"Status Code: {response_create_vlan.status_code}")
-        print("Response JSON:")
-        print(response_create_vlan.json())
-    
+        try:
+            # Print the response content
+            print("Response Content:")
+            print(response_create_vlan.text)
+            # Attempt to parse the JSON response
+            print("Response JSON:")
+            print(response_create_vlan.json())
+        except json.decoder.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+
     # Continue with other tasks...
     # ...
 
