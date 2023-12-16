@@ -23,7 +23,7 @@ if existing_network:
     # Enable VLANs for the network
     dashboard.appliance.updateNetworkApplianceSettings(network_id, vlansEnabled=True)
     # Update VLAN
-    response_vlan = dashboard.appliance.createNetworkApplianceVlan(network_id, id='100', name='voice')
+    response_vlan = dashboard.appliance.updateNetworkApplianceVlan(network_id, vlan_id='100', **vlan_data)
 
     print("Update VLAN Response:")
     print(response_vlan)
@@ -47,7 +47,7 @@ else:
     }
 
     # Create VLAN
-    response_vlan = dashboard.appliance.createNetworkApplianceVlan(network_id, **vlan_data)
+    response_vlan = dashboard.appliance.createNetworkApplianceVlan(network_id, id='100', name='voice', **vlan_data)
 
     print("Create VLAN Response:")
     print(response_vlan)
