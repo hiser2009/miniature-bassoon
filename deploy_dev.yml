@@ -11,10 +11,10 @@
   tasks:
     - name: Debug Variables
       debug:
-        var:
-          - meraki_api_key
-          - org_id
-          - dev_network_id
+        msg:
+          - "Meraki API Key: {{ lookup('env', 'MERAKI_API_KEY') }}"
+          - "Organization ID: {{ lookup('env', 'ORG_ID') }}"
+          - "Dev Network ID: {{ dev_network_id }}"
 
     - name: Create Dev network
       uri:
