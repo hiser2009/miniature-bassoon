@@ -19,7 +19,7 @@
         body_format: json
         body:
           name: "Dev Network"
-          type: "switch"
+          type: "appliance"
           timeZone: "America/New_York"
         status_code: 201
       register: dev_network_response
