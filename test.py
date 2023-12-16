@@ -22,7 +22,7 @@ if existing_network:
     }
 
     # Update VLAN
-    response_vlan = dashboard.appliance.updateNetworkApplianceVlan(network_id, vlan_id='', **vlan_data)
+    response_vlan = dashboard.appliance.createNetworkApplianceVlan(network_id, id='100', name='voice')
 
     print("Update VLAN Response:")
     print(response_vlan)
