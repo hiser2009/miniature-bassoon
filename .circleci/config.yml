@@ -1,28 +1,39 @@
 version: 2.1
 
 jobs:
-  fetch-meraki-networks:
+  deploy_dev:
     docker:
-      - image: cimg/python:3.12.1
+      - image: cimg/python:3.12.1  # Choose an appropriate Docker image with Ansible installed
+    working_directory: /app
 
     steps:
       - checkout
 
       - run:
-          name: Install Dependencies
-          command: |
-            pip install requests
+          name: Install dependencies
+          command: pip install ansible
 
       - run:
-          name: Fetch Meraki Networks
-          command: |
-            python .github/scripts/fetch_meraki_networks.py
-            #python .github/scripts/test.py
-
+          name: Deploy to Dev
+          command: ansible-playbook deploy_dev.yml
+          environment:
+            MERAKI_API_KEY: $MERAKI_API_KEY
+            ORG_ID: $ORG_ID
+            DEV_NETWORK_ID: Nashville_TN_Branch  # Set your desired DEV_NETWORK_ID here
 
 workflows:
-  my-workflow:
+  version: 2
+  deploy_workflow:
     jobs:
-      - fetch-meraki-networks:
-          context:
-            - meraki_stuff
+      - deploy_dev:
+          filters:
+            branches:
+              only:
+                - feat_branch  # Adjust the branch name as needed
+
+      - deploy_feature:
+          type: approval
+          filters:
+            branches:
+              only:
+                - feature/*  # Adjust the branch name pattern as needed
