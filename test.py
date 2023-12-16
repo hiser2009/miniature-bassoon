@@ -19,7 +19,7 @@ network = dashboard.organizations.createOrganizationNetwork(
 network_id = network['id']
 print(f"Network ID: {network_id}")
 
-# Create VLAN
+# Define VLAN data
 vlan_data = {
     "name": "Voice",
     "subnet": "192.168.100.0/24",
@@ -59,7 +59,5 @@ vlan_data = {
     "vpnNatSubnet": "192.168.100.0/24"
 }
 
-response_vlan = dashboard.appliance.updateNetworkApplianceVlan(network_id, vlan_id='', **vlan_data)
-
-print("Create VLAN Response:")
-print(response_vlan)
+# Create VLAN
+response_vlan = dashboard
