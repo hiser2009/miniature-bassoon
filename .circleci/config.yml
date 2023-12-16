@@ -4,7 +4,7 @@ jobs:
   deploy_dev:
     docker:
       - image: cimg/python:3.12.1  # Choose an appropriate Docker image with Ansible installed
-    working_directory: /app
+    working_directory: /home/circleci/project
 
     steps:
       - checkout
