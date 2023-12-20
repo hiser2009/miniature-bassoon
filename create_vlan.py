@@ -45,8 +45,8 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
             "dnsNameservers": "upstream_dns"
         }
 
-        # Use createNetworkApplianceFirewallL3FirewallRules to create DHCP scope
-        response = dashboard.appliance.createNetworkApplianceFirewallL3FirewallRules(network_id, rules=[dhcp_data])
+        # Use updateNetworkApplianceFirewallL3FirewallRules to create DHCP scope
+        response = dashboard.appliance.updateNetworkApplianceFirewallL3FirewallRules(network_id, vlan_id, rules=[dhcp_data])
         print(f"DHCP scope for VLAN '{vlan_id}' created successfully:")
         print(response)
     except meraki.APIError as e:
