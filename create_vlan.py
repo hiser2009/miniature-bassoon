@@ -42,7 +42,10 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
             "minIpAddress": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.100",
             "maxIpAddress": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.254",
             "defaultGateway": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.1",
-            "dnsNameservers": "upstream_dns"
+            "dnsNameservers": "upstream_dns",
+            'dhcpHandling': 'Run a DHCP server',
+            'dhcpLeaseTime': '1 day',
+            'dhcpBootOptionsEnabled': False
         }
 
         # Use updateNetworkApplianceVlan to create DHCP scope
