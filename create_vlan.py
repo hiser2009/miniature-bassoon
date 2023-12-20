@@ -23,9 +23,9 @@ def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
         print(f"Error creating VLAN: {e}")
 
 if __name__ == "__main__":
-    vlan_id = input("Enter VLAN ID: ")
-    vlan_name = input("Enter VLAN Name: ")
-    subnet = input("Enter VLAN Subnet (e.g., 192.168.10.0/24): ")
-    appliance_ip = input("Enter Appliance IP Address: ")
+    vlan_id = input("100")
+    vlan_name = input("DEV_VLAN")
+    subnet = input("192.168.10.0/24")
+    appliance_ip = input("192.168.10.1")
 
     create_vlan(NETWORK_ID, vlan_id, vlan_name, subnet, appliance_ip)
