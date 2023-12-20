@@ -6,55 +6,68 @@ ORG_ID = os.getenv('ORG_ID')  # Use your environment variable
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
-# Check if the network already exists
-networks = dashboard.organizations.getOrganizationNetworks(ORG_ID)
+def check_batch_completion(org, batch_id):
+    # ... (unchanged)
 
-network_name = 'Orlando_FL_Branch'
-existing_network = next((n for n in networks if n['name'] == network_name), None)
+def create_networks_and_assign_devices(org):
+    # ... (unchanged)
 
-if existing_network:
-    # Network already exists, update VLAN
-    network_id = existing_network['id']
-    print(f"Network ID: {network_id}")
+    with open('meraki_config.csv', mode='r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        header = True
 
-    vlan_data = {
-        # ... VLAN data as before ...
-    }
-    
-    # Update VLAN settings
-    response_settings = dashboard.appliance.updateNetworkApplianceVlansSettings(
-        network_id,
-        vlansEnabled=True
-    )
-    print("Update VLAN Settings Response:")
-    print(response_settings)
+        for row in csv_reader:
+            if header:
+                print(f'Column names are {", ".join(row)}')
+                header = False
+            
+            # ... (unchanged)
 
-    # Update VLAN
-    response_vlan = dashboard.appliance.updateNetworkApplianceVlan(network_id, vlanId='100', **vlan_data)
+            for network in networks:
+                if network["name"] == row["Network Name"]:
+                    network_id = network["id"]
 
-    print("Update VLAN Response:")
-    print(response_vlan)
+                    # Enable VLANs for the network
+                    dashboard.appliance.updateNetworkApplianceVlansSettings(network_id, vlansEnabled=True)
 
-else:
-    # Network does not exist, create network and VLAN
-    network = dashboard.organizations.createOrganizationNetwork(
-        ORG_ID,
-        name=network_name,
-        type='combined',
-        timeZone='America/New_York',
-        productTypes=['appliance', 'switch', 'wireless']
-    )
+                    # Create VLANs
+                    network_vlan_actions = []
+                    for number in range(4):  # Create 4 VLANs
+                        network_vlan_actions.append({
+                            "resource": f"/networks/{network_id}/vlans",
+                            "operation": "create",
+                            "body": {
+                                "id": number + 2,
+                                "name": f"VLAN {number + 2}",
+                                "applianceIp": f"{row['VLAN_subnet']}.{number + 2}.1",
+                                "subnet": f"{row['VLAN_subnet']}.{number + 2}.0/24"
+                            }
+                        })
 
-    # Extract the network ID
-    network_id = network['id']
-    print(f"Network ID: {network_id}")
+                    batch = dashboard.organizations.createOrganizationActionBatch(org, network_vlan_actions, confirmed=True, synchronous=False)
+                    check_batch_completion(org, batch["id"])
 
-    vlan_data = {
-        # ... VLAN data as before ...
-    }
+                    # Enable DHCP on VLANs
+                    vlan_ids = [vlan["id"] for vlan in dashboard.appliance.getNetworkApplianceVlans(network_id)]
+                    dhcp_settings = {"dhcpHandling": "Run a DHCP server", "dhcpLeaseTime": "4 hours"}
+                    for vlan_id in vlan_ids:
+                        dashboard.appliance.updateNetworkApplianceVlan(network_id, vlan_id=vlan_id, **dhcp_settings)
 
-    # Create VLAN
-    response_vlan = dashboard.appliance.createNetworkApplianceVlan(network_id, id='100', name='voice', **vlan_data)
+                    print("Created VLANs and enabled DHCP for the network.")
 
-    print("Create VLAN Response:")
-    print(response_vlan)
+# ... (unchanged)
+
+if __name__ == "__main__":
+    org = get_org_by_choice()
+
+    opts, args = getopt.getopt(sys.argv[1:], "hcd", ["create", "delete"])
+
+    for opt, arg in opts:
+        if opt == "-h":
+            print("meraki_network_vlan_provisioning.py -c for create \n")
+            print("meraki_network_vlan_provisioning.py -d for delete \n")
+            sys.exit()
+        elif opt in ("-c", "--create"):
+            create_networks_and_assign_devices(org)
+        elif opt in ("-d", "--delete"):
+            delete_networks(org)

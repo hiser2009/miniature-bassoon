@@ -14,11 +14,11 @@ jobs:
             pip install requests
             pip install meraki
       
-      - run:
-          name: Create Meraki Networks
-          command: |
-            python test.py
-            #python test.py
+      # - run:
+      #     name: Create Meraki Networks
+      #     command: |
+      #       python test.py
+      #       #python test.py
 
       - run:
           name: Fetch Meraki Networks
