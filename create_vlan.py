@@ -25,15 +25,14 @@ def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
             "fixedIpAssignments": {},
             "reservedIpRanges": [],
             "dnsNameservers": "upstream_dns",
-            "dhcpHandling": "Run a DHCP server"  # Corrected value
+            "dhcpHandling": "Run a DHCP server"
         }
 
         response = dashboard.appliance.createNetworkApplianceVlan(network_id, **vlan_data)
         print(f"VLAN '{vlan_name}' created successfully:")
         print(response)
 
-        # Create DHCP scope for the VLAN
-        create_dhcp_scope(network_id, vlan_id, subnet)
+        # Do not create DHCP scope here, as it is already created in the above step
     except meraki.APIError as e:
         print(f"Error creating VLAN '{vlan_name}': {e}")
 
@@ -48,12 +47,14 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
             "dnsNameservers": "upstream_dns"
         }
 
-        # Use updateNetworkApplianceVlan to create DHCP scope
-        response = dashboard.appliance.updateNetworkApplianceVlan(network_id, vlan_id, **dhcp_data)
+        # This line is removed; do not use updateNetworkApplianceVlan for DHCP scope
+        # response = dashboard.appliance.updateNetworkApplianceVlan(network_id, vlan_id, **dhcp_data)
+
         print(f"DHCP scope for VLAN '{vlan_id}' created successfully:")
-        print(response)
+        print(dhcp_data)
     except meraki.APIError as e:
         print(f"Error creating DHCP scope for VLAN '{vlan_id}': {e}")
+
 
 
 if __name__ == "__main__":
