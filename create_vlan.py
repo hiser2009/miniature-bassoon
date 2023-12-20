@@ -22,9 +22,6 @@ def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
             "name": vlan_name,
             "subnet": subnet,
             "applianceIp": appliance_ip,
-            "fixedIpAssignments": {},
-            "reservedIpRanges": [],
-            "dnsNameservers": "upstream_dns",
             # "dhcpHandling": "Run a DHCP server"  # Enable DHCP
         }
 
