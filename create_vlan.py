@@ -7,6 +7,14 @@ NETWORK_ID = os.getenv('NETWORK_ID')  # Replace with your actual Meraki network 
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
+def enable_vlans(network_id):
+    try:
+        response = dashboard.appliance.updateNetworkApplianceVlansSettings(network_id, vlansEnabled=True)
+        print("VLANs enabled for the network:")
+        print(response)
+    except meraki.APIError as e:
+        print(f"Error enabling VLANs: {e}")
+
 def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
     try:
         vlan_data = {
@@ -28,4 +36,5 @@ if __name__ == "__main__":
     subnet = "192.168.10.0/24"
     appliance_ip = "192.168.10.1"
 
+    enable_vlans(NETWORK_ID)
     create_vlan(NETWORK_ID, vlan_id, vlan_name, subnet, appliance_ip)
