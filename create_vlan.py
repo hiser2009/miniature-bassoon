@@ -25,16 +25,20 @@ def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
         }
 
         response = dashboard.appliance.createNetworkApplianceVlan(network_id, **vlan_data)
-        print("VLAN created successfully:")
+        print(f"VLAN '{vlan_name}' created successfully:")
         print(response)
     except meraki.APIError as e:
-        print(f"Error creating VLAN: {e}")
+        print(f"Error creating VLAN '{vlan_name}': {e}")
 
 if __name__ == "__main__":
-    vlan_id = 100
-    vlan_name = "DEV_VLAN"
-    subnet = "192.168.10.0/24"
-    appliance_ip = "192.168.10.1"
+    vlan_settings = [
+        {"id": 100, "name": "VLAN1", "subnet": "192.168.10.0/24", "appliance_ip": "192.168.10.1"},
+        {"id": 101, "name": "VLAN2", "subnet": "192.168.20.0/24", "appliance_ip": "192.168.20.1"},
+        {"id": 102, "name": "VLAN3", "subnet": "192.168.30.0/24", "appliance_ip": "192.168.30.1"},
+        {"id": 103, "name": "VLAN4", "subnet": "192.168.40.0/24", "appliance_ip": "192.168.40.1"}
+    ]
 
     enable_vlans(NETWORK_ID)
-    create_vlan(NETWORK_ID, vlan_id, vlan_name, subnet, appliance_ip)
+
+    for vlan in vlan_settings:
+        create_vlan(NETWORK_ID, vlan["id"], vlan["name"], vlan["subnet"], vlan["appliance_ip"])
