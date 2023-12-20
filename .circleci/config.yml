@@ -21,7 +21,7 @@ jobs:
       #       #python test.py
 
       - run:
-          name: Fetch Meraki Networks
+          name: Create VLANS
           command: |
             # python fetch_meraki_networks.py
             #python .github/scripts/test.py
