@@ -24,7 +24,7 @@ def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
             "applianceIp": appliance_ip,
             "fixedIpAssignments": {},
             "reservedIpRanges": [],
-            "dnsNameservers": "upstream_dns",
+            "dnsNameservers": "Use Umbrella",
             "dhcpHandling": "Run a DHCP server"  # Enable DHCP
         }
 
@@ -45,7 +45,8 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
             "minIpAddress": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.100",
             "maxIpAddress": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.254",
             "defaultGateway": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.1",
-            "dnsNameservers": "upstream_dns"
+            "dnsNameservers": "upstream_dns",
+            "dhcpHandling": "Run a DHCP server"
         }
 
         # Use updateNetworkApplianceVlan to create DHCP scope
