@@ -25,7 +25,7 @@ def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
             "fixedIpAssignments": {},
             "reservedIpRanges": [],
             "dnsNameservers": "upstream_dns",
-            "dhcpHandling": "Do not respond to DHCP requests"
+            "dhcpHandling": "Run a DHCP Server"
         }
 
         response = dashboard.appliance.createNetworkApplianceVlan(network_id, **vlan_data)
