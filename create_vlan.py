@@ -45,28 +45,7 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
             "dnsNameservers": "upstream_dns"
         }
 
-        rules = [
-            {
-                "policy": "allow",
-                "protocol": "tcp",
-                "srcCidr": "any",
-                "destCidr": "any"
-            },
-            {
-                "policy": "allow",
-                "protocol": "udp",
-                "srcCidr": "any",
-                "destCidr": "any"
-            },
-            {
-                "policy": "deny",
-                "protocol": "any",
-                "srcCidr": "any",
-                "destCidr": "any"
-            }
-        ]
-
-        response = dashboard.appliance.updateNetworkApplianceFirewallL3FirewallRules(network_id, vlan_id, rules=rules)
+        response = dashboard.appliance.createNetworkApplianceFirewallL3FirewallRules(network_id, vlan_id, rules=[dhcp_data])
         print(f"DHCP scope for VLAN '{vlan_id}' created successfully:")
         print(response)
     except meraki.APIError as e:
@@ -76,8 +55,8 @@ if __name__ == "__main__":
     vlan_settings = [
         {"id": 10, "name": "VOICE", "subnet": "192.168.10.0/24", "appliance_ip": "192.168.10.1"},
         {"id": 20, "name": "DATA", "subnet": "192.168.20.0/24", "appliance_ip": "192.168.20.1"},
-        {"id": 30, "name": "INFRA", "subnet": "192.168.30.0/24", "appliance_ip": "192.168.30.1"},
-        {"id": 40, "name": "GUEST", "subnet": "192.168.40.0/24", "appliance_ip": "192.168.40.1"}
+        {"id": 30, "name": "GUEST", "subnet": "192.168.30.0/24", "appliance_ip": "192.168.30.1"},
+        {"id": 40, "name": "IOT", "subnet": "192.168.40.0/24", "appliance_ip": "192.168.40.1"}
     ]
 
     enable_vlans(NETWORK_ID)
