@@ -58,10 +58,10 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
 
 if __name__ == "__main__":
     vlan_settings = [
-        {"id": 10, "name": "VLAN10", "subnet": "192.168.10.0/24", "appliance_ip": "192.168.10.1"},
-        {"id": 20, "name": "VLAN20", "subnet": "192.168.20.0/24", "appliance_ip": "192.168.20.1"},
-        {"id": 30, "name": "VLAN30", "subnet": "192.168.30.0/24", "appliance_ip": "192.168.30.1"},
-        {"id": 40, "name": "VLAN40", "subnet": "192.168.40.0/24", "appliance_ip": "192.168.40.1"}
+        {"id": 100, "name": "VLAN100", "subnet": "192.168.100.0/24", "appliance_ip": "192.168.100.1"},
+        {"id": 200, "name": "VLAN200", "subnet": "192.168.200.0/24", "appliance_ip": "192.168.200.1"},
+        {"id": 300, "name": "VLAN300", "subnet": "192.168.30.0/24", "appliance_ip": "192.168.30.1"},
+        {"id": 400, "name": "VLAN400", "subnet": "192.168.40.0/24", "appliance_ip": "192.168.40.1"}
     ]
 
     enable_vlans(NETWORK_ID)
