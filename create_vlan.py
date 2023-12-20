@@ -40,7 +40,6 @@ def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
 def create_dhcp_scope(network_id, vlan_id, subnet):
     try:
         dhcp_data = {
-            "vlanId": vlan_id,
             "subnet": subnet,
             "applianceIp": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.1",
             "minIpAddress": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.100",
@@ -55,6 +54,7 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
         print(response)
     except meraki.APIError as e:
         print(f"Error creating DHCP scope for VLAN '{vlan_id}': {e}")
+
 
 if __name__ == "__main__":
     vlan_settings = [
