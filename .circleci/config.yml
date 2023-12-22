@@ -27,6 +27,18 @@ jobs:
           command: |
             pip install requests
             pip install meraki
+      # - run:
+      #     name: Show Networks
+      #     command: |
+      #       python show_networks.py
+      #       python -c "print('~' * 40)"
+
+      # - run:
+      #     name: Create Networks
+      #     command: |
+      #       python create_network.py
+      #       python -c "print('~' * 40)"
+
       - run:
           name: Show Networks
           command: |
@@ -34,9 +46,9 @@ jobs:
             python -c "print('~' * 40)"
 
       - run:
-          name: Create Networks
+          name: Delete Networks
           command: |
-            python create_network.py
+            python delete_network.py
             python -c "print('~' * 40)"
 
       - run:
