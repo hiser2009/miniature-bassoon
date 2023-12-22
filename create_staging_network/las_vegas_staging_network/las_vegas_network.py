@@ -11,7 +11,6 @@ def create_network(org_id, network_name, network_type='combined'):
         if not network_name.startswith('DEV-'):
             network_name = f'DEV-{network_name}'
 
-
         # Corrected productTypes values
         network = dashboard.organizations.createOrganizationNetwork(
             org_id,

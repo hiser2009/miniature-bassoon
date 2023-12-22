@@ -69,7 +69,6 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
     except meraki.APIError as e:
         print(f"Error creating DHCP scope for VLAN '{vlan_id}': {e}")
 
-
 if __name__ == "__main__":
     # Retrieve the created network ID from the file
     CREATED_NETWORK_ID = read_created_network_id()
