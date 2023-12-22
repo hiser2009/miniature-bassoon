@@ -8,9 +8,8 @@ dashboard = meraki.DashboardAPI(API_KEY)
 
 def create_network(org_id, network_name, network_type='appliance'):
     try:
-        # Remove 'DEV-' prefix if present
-        if network_name.startswith('DEV-'):
-            network_name = network_name[4:]
+        if not network_name.startswith('DEV-'):
+            network_name = f'DEV-{network_name}'
 
         network = dashboard.organizations.createOrganizationNetwork(
             org_id,
@@ -25,7 +24,7 @@ def create_network(org_id, network_name, network_type='appliance'):
         return None
 
 if __name__ == "__main__":
-    new_network_name = "DEV-MyNewDevNet"
+    new_network_name = "MyNewDevNet"
     created_network_id = create_network(ORG_ID, new_network_name)
 
     # Set the environment variable for the created network ID
