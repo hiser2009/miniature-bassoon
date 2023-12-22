@@ -55,13 +55,13 @@ jobs:
       - run:
           name: Show Networks
           command: |
-            python show_networks/show_networks.py
+            python show/show_networks.py
             python -c "print('~' * 40)"
             
       - run:
           name: Show VLANS & DHCP
           command: |
-            python show_networks/show_vlans_dhcp.py
+            python show/show_vlans_dhcp.py
             python -c "print('~' * 40)"
       
       # - run:
