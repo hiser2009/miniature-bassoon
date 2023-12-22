@@ -2,8 +2,8 @@ import os
 import meraki
 
 API_KEY = os.getenv('MERAKI_API_KEY')  # Replace with your actual Meraki API key
-NETWORK_ID = 'N_705376291636949794'  # Dummy Network
-# NETWORK_ID = os.getenv('CREATED_NETWORK_ID')  # Retrieve the value of CREATED_NETWORK_ID
+# NETWORK_ID = 'N_705376291636949794'  # Dummy Network
+NETWORK_ID = os.getenv('CREATED_NETWORK_ID')  # Retrieve the value of CREATED_NETWORK_ID
 
 dashboard = meraki.DashboardAPI(API_KEY)
 

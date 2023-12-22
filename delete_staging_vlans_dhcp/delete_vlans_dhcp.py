@@ -3,7 +3,9 @@ import meraki
 
 API_KEY = os.getenv('MERAKI_API_KEY')  # Replace with your actual Meraki API key
 ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
-NETWORK_ID = os.getenv('NETWORK_ID')  # Replace with your actual Meraki network ID
+# NETWORK_ID = os.getenv('NETWORK_ID')  # Replace with your actual Meraki network ID
+NETWORK_ID = os.getenv('CREATED_NETWORK_ID')  # Retrieve the value of CREATED_NETWORK_ID
+
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
