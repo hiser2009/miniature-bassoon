@@ -6,6 +6,7 @@ ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
 NETWORK_ID_FILE = 'created_network_id.txt'  # File containing the created network ID
 # CREATED_NETWORK_ID = os.getenv('CREATED_NETWORK_ID')  # Retrieve the value of CREATED_NETWORK_ID
 
+
 dashboard = meraki.DashboardAPI(API_KEY)
 
 # Function to read the created network ID from the file

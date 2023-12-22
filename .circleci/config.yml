@@ -1,7 +1,6 @@
 version: 2.1
 
 jobs:
-
   build:
     docker:
       - image: cimg/python:3.12.1
@@ -16,14 +15,13 @@ jobs:
             pip install meraki
             pip install --upgrade meraki
 
-
   deploy_dev_staging:
     docker:
       - image: cimg/python:3.12.1
+
     steps:
       - checkout
-      # Add steps to deploy to DEV_STAGING
-      # This job will be triggered for branches other than MAIN
+
       - run:
           name: Install Dependencies
           command: |
@@ -60,15 +58,19 @@ jobs:
           command: |
             python show/show_vlans_dhcp.py
             python -c "print('~' * 40)"
-      
-  
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - created_network_id.txt
+
   delete_staging_env:
     docker:
       - image: cimg/python:3.12.1
+
     steps:
       - checkout
-      # Add steps to deploy to PROD
-      # This job will be triggered for the MAIN branch
+
       - run:
           name: Install Dependencies
           command: |
@@ -76,6 +78,8 @@ jobs:
             pip install meraki
             pip install --upgrade meraki
 
+      - attach_workspace:
+          at: /workspace
 
       - run:
           name: Show Networks
@@ -116,10 +120,10 @@ jobs:
   deploy_prod:
     docker:
       - image: cimg/python:3.12.1
+
     steps:
       - checkout
-      # Add steps to deploy to PROD
-      # This job will be triggered for the MAIN branch
+
       - run:
           name: Install Dependencies
           command: |
@@ -127,7 +131,6 @@ jobs:
             pip install meraki
             pip install --upgrade meraki
 
- 
       - run:
           name: Create Networks
           command: |
@@ -152,12 +155,10 @@ jobs:
             python show/show_vlans_dhcp.py
             python -c "print('~' * 40)"
 
-
 workflows:
   version: 2
   build_and_deploy:
     jobs:
-      
       - hold:
           type: approval
           requires:
@@ -180,7 +181,7 @@ workflows:
           filters:
             branches:
               ignore: main  # Ignore the MAIN branch, trigger for other branches
-      
+
       - delete_staging_env:
           context:
             - meraki_stuff
