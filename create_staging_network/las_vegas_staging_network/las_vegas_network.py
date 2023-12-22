@@ -23,6 +23,7 @@ def create_network(org_id, network_name, network_type='combined'):
         print(f"Error creating network: {e}")
         return None
 
+
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
     created_network_id = create_network(ORG_ID, new_network_name)
