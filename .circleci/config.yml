@@ -92,7 +92,7 @@ jobs:
       - run:
           name: Delete VLANS & DHCP
           command: |
-            python delete_vlans_dhcp/delete_vlans_dhcp.py
+            python delete_staging_vlans_dhcp/delete_vlans_dhcp.py
             python -c "print('~' * 40)"
 
       - run:
@@ -104,7 +104,7 @@ jobs:
       - run:
           name: Delete Networks
           command: |
-            python delete_network/delete_network.py
+            python delete_staging_network/delete_network.py
             python -c "print('~' * 40)"
 
       - run:
