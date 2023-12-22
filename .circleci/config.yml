@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Create Networks
           command: |
-            python create_networks.py
+            python create_network.py
             python -c "print('~' * 40)"
 
       - run:
