@@ -6,7 +6,7 @@ ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
-def create_network(org_id, network_name, network_type=["appliance","camera","cellular gateway","environmental","switch","wireless"]):
+def create_network(org_id, network_name, network_type='combined'):
     try:
         if not network_name.startswith('DEV-'):
             network_name = f'DEV-{network_name}'
@@ -14,6 +14,7 @@ def create_network(org_id, network_name, network_type=["appliance","camera","cel
         network = dashboard.organizations.createOrganizationNetwork(
             org_id,
             name=network_name,
+            productTypes=["appliance","camera","cellular gateway","environmental","switch","wireless"],
             type=network_type  # Specify 'combined' as the type
         )
         network_id = network['id']
