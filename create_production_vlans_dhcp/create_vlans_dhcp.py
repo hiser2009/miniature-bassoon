@@ -17,6 +17,10 @@ def enable_vlans(network_id):
 
 def create_vlan(network_id, vlan_id, vlan_name, subnet, appliance_ip):
     try:
+        # Remove 'DEV-' prefix if present
+        if vlan_name.startswith('DEV-'):
+            vlan_name = vlan_name[4:]
+
         vlan_data = {
             "id": vlan_id,
             "name": vlan_name,
