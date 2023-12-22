@@ -37,7 +37,7 @@ jobs:
       - run:
           name: Create Networks
           command: |
-            python create_staging_network/las_vegas_staging_network/las_vegas_network_network.py
+            python create_staging_network/las_vegas_staging_network/las_vegas_network.py
             python -c "print('~' * 40)"
 
       - run:
