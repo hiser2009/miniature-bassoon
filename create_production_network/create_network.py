@@ -15,7 +15,7 @@ def create_network(org_id, network_name, network_type='combined'):
         network = dashboard.organizations.createOrganizationNetwork(
             org_id,
             name=network_name,
-            productTypes=[network_type]  # Include productTypes as a list
+            type=network_type  # Specify 'combined' as the type
         )
         network_id = network['id']
         print(f"Network '{network_name}' created successfully. Network ID: {network_id}")
