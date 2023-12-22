@@ -39,6 +39,18 @@ jobs:
             python vlans_dhcp.py
             python -c "print('~' * 40)"
       
+      - run:
+          name: Delete VLANS & DHCP
+          command: |
+            python delete_networks.py
+            python -c "print('~' * 40)"
+
+      - run:
+          name: Show VLANS & DHCP
+          command: |
+            python vlans_dhcp.py
+            python -c "print('~' * 40)"
+      
 
   deploy_prod:
     docker:
