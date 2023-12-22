@@ -46,17 +46,17 @@ jobs:
       #       python show/show_networks.py
       #       python -c "print('~' * 40)"
 
-      # - run:
-      #     name: Delete Networks
-      #     command: |
-      #       python delete_network/delete_network.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Delete Networks
+          command: |
+            python delete_network/delete_network.py
+            python -c "print('~' * 40)"
 
-      # - run:
-      #     name: Show Networks
-      #     command: |
-      #       python show/show_networks.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Show Networks
+          command: |
+            python show/show_networks.py
+            python -c "print('~' * 40)"
             
       - run:
           name: Show VLANS & DHCP
