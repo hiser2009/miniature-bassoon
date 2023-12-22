@@ -3,9 +3,18 @@ import meraki
 
 API_KEY = os.getenv('MERAKI_API_KEY')  # Replace with your actual Meraki API key
 ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
-NETWORK_ID = os.getenv('NETWORK_ID')  # Replace with your actual Meraki network ID
+NETWORK_ID_FILE = 'created_network_id.txt'  # File containing the created network ID
+# NETWORK_ID = os.getenv('NETWORK_ID')  # Replace with your actual Meraki network ID
 
 dashboard = meraki.DashboardAPI(API_KEY)
+
+# Function to read the created network ID from the file
+def read_created_network_id():
+    try:
+        with open(NETWORK_ID_FILE, 'r') as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        return None
 
 def enable_vlans(network_id):
     try:
@@ -61,14 +70,19 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
 
 
 if __name__ == "__main__":
-    vlan_settings = [
-        {"id": 132, "name": "VOICE", "subnet": "10.232.132.0/24", "appliance_ip": "10.232.132.1"},
-        {"id": 133, "name": "DATA", "subnet": "10.232.133.0/24", "appliance_ip": "10.232.133.1"},
-        {"id": 134, "name": "INFRA", "subnet": "10.232.134.0/24", "appliance_ip": "10.232.134.1"},
-        {"id": 135, "name": "GUEST", "subnet": "10.232.135.0/24", "appliance_ip": "10.232.135.1"}
-    ]
+    # Retrieve the created network ID from the file
+    CREATED_NETWORK_ID = read_created_network_id()
+    if CREATED_NETWORK_ID:
+        enable_vlans(CREATED_NETWORK_ID)
 
-    enable_vlans(NETWORK_ID)
+        vlan_settings = [
+            {"id": 132, "name": "VOICE", "subnet": "10.232.132.0/24", "appliance_ip": "10.232.132.1"},
+            {"id": 133, "name": "DATA", "subnet": "10.232.133.0/24", "appliance_ip": "10.232.133.1"},
+            {"id": 134, "name": "INFRA", "subnet": "10.232.134.0/24", "appliance_ip": "10.232.134.1"},
+            {"id": 135, "name": "GUEST", "subnet": "10.232.135.0/24", "appliance_ip": "10.232.135.1"}
+        ]
 
-    for vlan in vlan_settings:
-        create_vlan(NETWORK_ID, vlan["id"], vlan["name"], vlan["subnet"], vlan["appliance_ip"])
+        for vlan in vlan_settings:
+            create_vlan(CREATED_NETWORK_ID, vlan["id"], vlan["name"], vlan["subnet"], vlan["appliance_ip"])
+    else:
+        print("Environment variable CREATED_NETWORK_ID not set.")

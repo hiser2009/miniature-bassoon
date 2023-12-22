@@ -3,9 +3,18 @@ import meraki
 
 API_KEY = os.getenv('MERAKI_API_KEY')  # Replace with your actual Meraki API key
 ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
-CREATED_NETWORK_ID = os.getenv('CREATED_NETWORK_ID')  # Retrieve the value of CREATED_NETWORK_ID
+NETWORK_ID_FILE = 'created_network_id.txt'  # File containing the created network ID
+# CREATED_NETWORK_ID = os.getenv('CREATED_NETWORK_ID')  # Retrieve the value of CREATED_NETWORK_ID
 
 dashboard = meraki.DashboardAPI(API_KEY)
+
+# Function to read the created network ID from the file
+def read_created_network_id():
+    try:
+        with open(NETWORK_ID_FILE, 'r') as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        return None
 
 def enable_vlans(network_id):
     try:
@@ -61,6 +70,8 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
 
 
 if __name__ == "__main__":
+    # Retrieve the created network ID from the file
+    CREATED_NETWORK_ID = read_created_network_id()
     if CREATED_NETWORK_ID:
         enable_vlans(CREATED_NETWORK_ID)
 

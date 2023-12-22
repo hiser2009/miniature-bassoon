@@ -32,5 +32,10 @@ if __name__ == "__main__":
     if created_network_id:
         os.environ['CREATED_NETWORK_ID'] = created_network_id
         print(f"Environment variable CREATED_NETWORK_ID set to: {created_network_id}")
+
+        # Write the created network ID to a file
+        with open('created_network_id.txt', 'w') as file:
+            file.write(created_network_id)
+            print("Network ID written to file.")
     else:
         print("Network creation failed.")
