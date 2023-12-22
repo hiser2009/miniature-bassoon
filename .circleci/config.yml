@@ -31,6 +31,7 @@ jobs:
           name: Show Networks
           command: |
             python show_networks.py
+            python vlans_dhcp.py
 
   deploy_prod:
     docker:
@@ -50,7 +51,6 @@ jobs:
             # python fetch_meraki_networks.py
             #python .github/scripts/test.py
             python show_networks.py
-            python vlans_dhcp.py
             # python create_vlan.py
 
 
