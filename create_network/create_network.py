@@ -8,15 +8,28 @@ dashboard = meraki.DashboardAPI(API_KEY)
 
 def create_network(org_id, network_name, network_type='appliance'):
     try:
+        if not network_name.startswith('DEV-'):
+            network_name = f'DEV-{network_name}'
+
         network = dashboard.organizations.createOrganizationNetwork(
             org_id,
             name=network_name,
             productTypes=[network_type]  # Include productTypes as a list
         )
-        print(f"Network '{network_name}' created successfully. Network ID: {network['id']}")
+        network_id = network['id']
+        print(f"Network '{network_name}' created successfully. Network ID: {network_id}")
+        return network_id
     except meraki.APIError as e:
         print(f"Error creating network: {e}")
+        return None
 
 if __name__ == "__main__":
     new_network_name = "MyNewDevNet"
-    create_network(ORG_ID, new_network_name)
+    created_network_id = create_network(ORG_ID, new_network_name)
+
+    # Set the environment variable for the created network ID
+    if created_network_id:
+        os.environ['CREATED_NETWORK_ID'] = created_network_id
+        print(f"Environment variable CREATED_NETWORK_ID set to: {created_network_id}")
+    else:
+        print("Network creation failed.")
