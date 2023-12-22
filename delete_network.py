@@ -3,13 +3,13 @@ import meraki
 
 API_KEY = os.getenv('MERAKI_API_KEY')  # Replace with your actual Meraki API key
 ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
-NETWORK_ID = os.getenv('N_705376291636949792')  # MyNewDevNet 
+NETWORK_ID = 'N_705376291636949792'  # MyNewDevNet Meraki network ID N_705376291636949792
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
 def delete_network(org_id, network_id):
     try:
-        dashboard.organizations.deleteOrganizationNetwork(
+        dashboard.networks.deleteNetwork(
             org_id,
             network_id
         )
