@@ -1,7 +1,8 @@
 version: 2.1
 
 jobs:
-  fetch-meraki-networks:
+
+  build:
     docker:
       - image: cimg/python:3.12.1
 
@@ -12,17 +13,81 @@ jobs:
           name: Install Dependencies
           command: |
             pip install requests
+            pip install meraki
 
+  deploy_dev_staging:
+    docker:
+      - image: cimg/python:3.12.1
+    steps:
+      - checkout
+      # Add steps to deploy to DEV_STAGING
+      # This job will be triggered for branches other than MAIN
       - run:
-          name: Fetch Meraki Networks
+          name: Install Dependencies
           command: |
-            python .github/scripts/fetch_meraki_networks.py
+            pip install requests
+            pip install meraki
+      - run:
+          name: Show Networks
+          command: |
+            python show_networks.py
+
+  deploy_prod:
+    docker:
+      - image: cimg/python:3.12.1
+    steps:
+      - checkout
+      # Add steps to deploy to PROD
+      # This job will be triggered for the MAIN branch
+      - run:
+          name: Install Dependencies
+          command: |
+            pip install requests
+            pip install meraki
+      - run:
+          name: Create VLANS
+          command: |
+            # python fetch_meraki_networks.py
             #python .github/scripts/test.py
+            python show_networks.py
+            # python create_vlan.py
 
 
 workflows:
-  my-workflow:
+  version: 2
+  build_and_deploy:
     jobs:
-      - fetch-meraki-networks:
+      
+      - hold:
+          type: approval
+          requires:
+            - build
+
+      - build:
           context:
             - meraki_stuff
+
+      - deploy_dev_staging:
+          context:
+            - meraki_stuff
+          requires:
+            - hold
+          filters:
+            branches:
+              ignore: main  # Ignore the MAIN branch, trigger for other branches
+
+      - deploy_prod:
+          requires:
+            - hold
+          context:
+            - meraki_stuff
+          filters:
+            branches:
+              only: main  # Trigger only for the MAIN branch
+
+# workflows:
+#   my-workflow:
+#     jobs:
+#       - build:
+#           context:
+#             - meraki_stuff
