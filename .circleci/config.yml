@@ -64,11 +64,11 @@ jobs:
             python show/show_vlans_dhcp.py
             python -c "print('~' * 40)"
       
-      # - run:
-      #     name: Delete VLANS & DHCP
-      #     command: |
-      #       python delete_network/delete_network.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Delete VLANS & DHCP
+          command: |
+            python delete_vlans_dhcp/delete_vlans_dhcp.py
+            python -c "print('~' * 40)"
 
       - run:
           name: Show VLANS & DHCP
