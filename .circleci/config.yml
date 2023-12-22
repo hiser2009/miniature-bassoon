@@ -28,11 +28,11 @@ jobs:
             pip install requests
             pip install meraki
 
-      - run:
-          name: Show Networks
-          command: |
-            python show/show_networks.py
-            python -c "print('~' * 40)"
+      # - run:
+      #     name: Show Networks
+      #     command: |
+      #       python show/show_networks.py
+      #       python -c "print('~' * 40)"
 
       # - run:
       #     name: Create Networks
@@ -40,23 +40,23 @@ jobs:
       #       python create_network/create_network.py
       #       python -c "print('~' * 40)"
 
-      # - run:
-      #     name: Show Networks
-      #     command: |
-      #       python show/show_networks.py
-      #       python -c "print('~' * 40)"
-
-      - run:
-          name: Delete Networks
-          command: |
-            python delete_network/delete_network.py
-            python -c "print('~' * 40)"
-
       - run:
           name: Show Networks
           command: |
             python show/show_networks.py
             python -c "print('~' * 40)"
+
+      # - run:
+      #     name: Delete Networks
+      #     command: |
+      #       python delete_network/delete_network.py
+      #       python -c "print('~' * 40)"
+
+      # - run:
+      #     name: Show Networks
+      #     command: |
+      #       python show/show_networks.py
+      #       python -c "print('~' * 40)"
             
       - run:
           name: Show VLANS & DHCP
@@ -64,17 +64,17 @@ jobs:
             python show/show_vlans_dhcp.py
             python -c "print('~' * 40)"
       
-      # - run:
-      #     name: Delete VLANS & DHCP
-      #     command: |
-      #       python delete_networks.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Delete VLANS & DHCP
+          command: |
+            python delete_network/delete_networks.py
+            python -c "print('~' * 40)"
 
-      # - run:
-      #     name: Show VLANS & DHCP
-      #     command: |
-      #       python vlans_dhcp.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Show VLANS & DHCP
+          command: |
+            python show/vlans_dhcp.py
+            python -c "print('~' * 40)"
       
       # - run:
       #     name: Create VLANS & DHCP
