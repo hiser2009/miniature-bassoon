@@ -34,11 +34,11 @@ jobs:
             python show/show_networks.py
             python -c "print('~' * 40)"
 
-      # - run:
-      #     name: Create Networks
-      #     command: |
-      #       python create_network/create_network.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Create Networks
+          command: |
+            python create_network/create_network.py
+            python -c "print('~' * 40)"
 
       # - run:
       #     name: Show Networks
@@ -46,11 +46,11 @@ jobs:
       #       python show/show_networks.py
       #       python -c "print('~' * 40)"
 
-      - run:
-          name: Delete Networks
-          command: |
-            python delete_network/delete_network.py
-            python -c "print('~' * 40)"
+      # - run:
+      #     name: Delete Networks
+      #     command: |
+      #       python delete_network/delete_network.py
+      #       python -c "print('~' * 40)"
 
       - run:
           name: Show Networks
