@@ -50,6 +50,7 @@ jobs:
             # python fetch_meraki_networks.py
             #python .github/scripts/test.py
             python show_networks.py
+            python vlans_dhcp.py
             # python create_vlan.py
 
 
