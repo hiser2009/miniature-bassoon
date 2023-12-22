@@ -11,7 +11,7 @@ def create_network(org_id, network_name, network_type='appliance'):
         network = dashboard.organizations.createOrganizationNetwork(
             org_id,
             name=network_name,
-            type=network_type
+            productTypes=[network_type]  # Include productTypes as a list
         )
         print(f"Network '{network_name}' created successfully. Network ID: {network['id']}")
     except meraki.APIError as e:
