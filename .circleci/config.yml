@@ -67,7 +67,7 @@ jobs:
       - run:
           name: Delete VLANS & DHCP
           command: |
-            python delete_network/delete_networks.py
+            python delete_network/delete_network.py
             python -c "print('~' * 40)"
 
       - run:
