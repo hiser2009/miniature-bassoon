@@ -62,7 +62,8 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - created_network_id.txt
+            - create_staging_network/las_vegas_staging_network/created_network_id.txt
+
 
   delete_staging_env:
     docker:
