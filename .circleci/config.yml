@@ -32,36 +32,48 @@ jobs:
           command: |
             python show_networks.py
             python -c "print('~' * 40)"
+
+      - run:
+          name: Create Networks
+          command: |
+            python create_networks.py
+            python -c "print('~' * 40)"
+
+      - run:
+          name: Show Networks
+          command: |
+            python show_networks.py
+            python -c "print('~' * 40)"
             
-      - run:
-          name: Show VLANS & DHCP
-          command: |
-            python vlans_dhcp.py
-            python -c "print('~' * 40)"
+      # - run:
+      #     name: Show VLANS & DHCP
+      #     command: |
+      #       python vlans_dhcp.py
+      #       python -c "print('~' * 40)"
       
-      - run:
-          name: Delete VLANS & DHCP
-          command: |
-            python delete_networks.py
-            python -c "print('~' * 40)"
+      # - run:
+      #     name: Delete VLANS & DHCP
+      #     command: |
+      #       python delete_networks.py
+      #       python -c "print('~' * 40)"
 
-      - run:
-          name: Show VLANS & DHCP
-          command: |
-            python vlans_dhcp.py
-            python -c "print('~' * 40)"
+      # - run:
+      #     name: Show VLANS & DHCP
+      #     command: |
+      #       python vlans_dhcp.py
+      #       python -c "print('~' * 40)"
       
-      - run:
-          name: Create VLANS & DHCP
-          command: |
-            python create_vlan.py
-            python -c "print('~' * 40)"
+      # - run:
+      #     name: Create VLANS & DHCP
+      #     command: |
+      #       python create_vlan.py
+      #       python -c "print('~' * 40)"
 
-      - run:
-          name: Show VLANS & DHCP
-          command: |
-            python vlans_dhcp.py
-            python -c "print('~' * 40)"
+      # - run:
+      #     name: Show VLANS & DHCP
+      #     command: |
+      #       python vlans_dhcp.py
+      #       python -c "print('~' * 40)"
 
   deploy_prod:
     docker:
