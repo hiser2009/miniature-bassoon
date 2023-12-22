@@ -11,10 +11,11 @@ def create_network(org_id, network_name, network_type='combined'):
         if not network_name.startswith('DEV-'):
             network_name = f'DEV-{network_name}'
 
+        # Corrected productTypes values
         network = dashboard.organizations.createOrganizationNetwork(
             org_id,
             name=network_name,
-            productTypes=["appliance","camera","cellular gateway","environmental","switch","wireless"],
+            productTypes=["appliance", "camera", "cellularGateway", "sensor", "switch", "wireless"],  # Update the values
             type=network_type  # Specify 'combined' as the type
         )
         network_id = network['id']
@@ -23,7 +24,6 @@ def create_network(org_id, network_name, network_type='combined'):
     except meraki.APIError as e:
         print(f"Error creating network: {e}")
         return None
-
 
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
