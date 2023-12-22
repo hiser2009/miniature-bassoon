@@ -14,6 +14,8 @@ jobs:
           command: |
             pip install requests
             pip install meraki
+            pip install --upgrade meraki
+
 
   deploy_dev_staging:
     docker:
@@ -27,6 +29,7 @@ jobs:
           command: |
             pip install requests
             pip install meraki
+            pip install --upgrade meraki
 
       - run:
           name: Show Networks
@@ -71,6 +74,8 @@ jobs:
           command: |
             pip install requests
             pip install meraki
+            pip install --upgrade meraki
+
 
       - run:
           name: Show Networks
@@ -120,6 +125,8 @@ jobs:
           command: |
             pip install requests
             pip install meraki
+            pip install --upgrade meraki
+
  
       - run:
           name: Create Networks
