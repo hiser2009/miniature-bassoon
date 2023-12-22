@@ -31,6 +31,7 @@ jobs:
           name: Show Networks
           command: |
             python show_networks.py
+            python print('~' * 40)
             python vlans_dhcp.py
 
   deploy_prod:
