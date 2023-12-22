@@ -49,7 +49,6 @@ jobs:
       - run:
           name: Create VLANS & DHCP
           command: |
-            sleep 15
             python create_staging_vlans_dhcp/las_vegas_staging_vlans_dhcp/las_vegas_staging_vlans_dhcp.py
             python -c "print('~' * 40)"
             
