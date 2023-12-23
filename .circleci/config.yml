@@ -27,7 +27,8 @@ jobs:
           command: |
             pip install requests
             pip install meraki
-            pip install --upgrade meraki
+            DEBIAN_FRONTEND=noninteractive sudo apt-get update -y
+            DEBIAN_FRONTEND=noninteractive sudo apt-get install tree -y
 
       - run:
           name: Show Networks
@@ -59,6 +60,14 @@ jobs:
             python show/show_vlans_dhcp.py
             python -c "print('~' * 40)"
 
+      - run:
+          name: Show Contents of created_network_id.txt
+          command: |
+            ls
+            tree
+            # echo "Hello, world!" > workspace/echo-output
+            cat /home/circleci/project/created_network_id.txt
+
       - persist_to_workspace:
           root: .
           paths:
@@ -67,8 +76,7 @@ jobs:
       - run:
           name: Show Contents of created_network_id.txt
           command: |
-            pwd
-            ls
+            echo "Hello, world!" > workspace/echo-output
             cat /home/circleci/project/created_network_id.txt
 
   delete_staging_env:
