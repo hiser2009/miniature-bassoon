@@ -13,7 +13,6 @@ jobs:
           command: |
             pip install requests
             pip install meraki
-            pip install --upgrade meraki
 
   deploy_dev_staging:
     docker:
@@ -60,11 +59,6 @@ jobs:
             python show/show_vlans_dhcp.py
             python -c "print('~' * 40)"
 
-      - run:
-          name: Show Contents of created_network_id.txt
-          command: |
-            ls
-            tree
 
       - persist_to_workspace:
           root: .
@@ -88,15 +82,8 @@ jobs:
             DEBIAN_FRONTEND=noninteractive sudo apt-get install tree -y
 
       - attach_workspace:
-          # at: /home/circleci/project/
           at: /home/circleci/project
 
-      - run:
-          name: Search For created_network_id.txt
-          command: |
-            pwd
-            ls
-            tree
 
       - run:
           name: Show Networks
