@@ -60,9 +60,10 @@ jobs:
             python -c "print('~' * 40)"
 
       - persist_to_workspace:
-          root: .
+          root: ./project/create_staging_network
           paths:
             - created_network_id.txt
+
 
 
   delete_staging_env:
@@ -80,7 +81,7 @@ jobs:
             pip install --upgrade meraki
 
       - attach_workspace:
-          at: /workspace
+          at: /workspace/project/create_staging_network
 
       - run:
           name: Show Networks
