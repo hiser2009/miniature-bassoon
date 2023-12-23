@@ -62,6 +62,7 @@ def create_wifi_ssid(network_id, network_name):
 
         # Define Wi-Fi SSID parameters
         ssid_params = {
+            "number": 0,
             "name": ssid_name,
             "enabled": True,
             "authMode": "psk",
