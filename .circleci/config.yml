@@ -66,7 +66,10 @@ jobs:
 
       - run:
           name: Show Contents of created_network_id.txt
-          command: cat /workspace/project/created_network_id.txt
+          command: |
+            pwd
+            ls
+            cat /project/created_network_id.txt
 
   delete_staging_env:
     docker:

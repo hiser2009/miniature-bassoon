@@ -8,7 +8,6 @@ NETWORK_ID_FILE = 'created_network_id.txt'  # File containing the created networ
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
-
 # Function to read the created network ID from the file
 def read_created_network_id():
     try:
