@@ -49,6 +49,7 @@ def create_sdwan_traffic_shaping_rule(network_id):
             },
             "dscpTagValue": 46,
             "priority": "high",
+            "defaultRulesEnabled": False,  # Explicitly set defaultRulesEnabled to False
             "globalBandwidthLimits": {
                 "limitUp": 0,
                 "limitDown": 0
@@ -61,6 +62,7 @@ def create_sdwan_traffic_shaping_rule(network_id):
         print(response)
     except meraki.APIError as e:
         print(f"Error creating SD-WAN traffic shaping rule: {e}")
+
 
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
