@@ -48,7 +48,11 @@ def create_sdwan_traffic_shaping_rule(network_id):
                 "settings": "ignore"
             },
             "dscpTagValue": 46,
-            "priority": "high"
+            "priority": "high",
+            "globalBandwidthLimits": {
+                "limitUp": 0,
+                "limitDown": 0
+            }
         }
 
         # Use updateNetworkApplianceTrafficShaping to create the rule
