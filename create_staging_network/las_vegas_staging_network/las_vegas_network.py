@@ -40,4 +40,3 @@ if __name__ == "__main__":
             print("Network ID written to file.")
     else:
         print("Network creation failed.")
-

@@ -83,9 +83,9 @@ jobs:
           command: |
             pip install requests
             pip install meraki
-            sudo su
-            apt-get update -y
-            apt-get install tree -y
+            DEBIAN_FRONTEND=noninteractive sudo apt-get update -y
+            DEBIAN_FRONTEND=noninteractive sudo apt-get install tree -y
+
 
       - attach_workspace:
           # at: /home/circleci/project/
