@@ -69,7 +69,7 @@ jobs:
           command: |
             pwd
             ls
-            cat /project/created_network_id.txt
+            cat /home/circleci/project/created_network_id.txt
 
   delete_staging_env:
     docker:
