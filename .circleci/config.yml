@@ -83,6 +83,8 @@ jobs:
           command: |
             pip install requests
             pip install meraki
+            sudo su
+            apt-get update -y
             apt-get install tree -y
 
       - attach_workspace:
