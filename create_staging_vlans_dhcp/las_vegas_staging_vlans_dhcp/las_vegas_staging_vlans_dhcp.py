@@ -4,7 +4,6 @@ import meraki
 API_KEY = os.getenv('MERAKI_API_KEY')  # Replace with your actual Meraki API key
 ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
 NETWORK_ID_FILE = 'created_network_id.txt'  # File containing the created network ID
-# CREATED_NETWORK_ID = os.getenv('CREATED_NETWORK_ID')  # Retrieve the value of CREATED_NETWORK_ID
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
@@ -57,7 +56,7 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
             "defaultGateway": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.1",
             "dnsNameservers": "upstream_dns",
             'dhcpHandling': 'Run a DHCP server',
-            'dhcpLeaseTime': '4 hours',
+            'dhcpLeaseTime': '8 hours',
             'dhcpBootOptionsEnabled': False
         }
 
