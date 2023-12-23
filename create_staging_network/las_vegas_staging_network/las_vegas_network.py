@@ -59,7 +59,6 @@ def create_wifi_ssid(network_id):
 
         # Define Wi-Fi SSID parameters
         ssid_params = {
-            "number": 1,
             "name": "Secure-WiFi",  # Update to a meaningful name
             "enabled": True,
             "authMode": "psk",
@@ -75,6 +74,7 @@ def create_wifi_ssid(network_id):
         print(response)
     except meraki.APIError as e:
         print(f"Error creating Wi-Fi SSID: {e}")
+
 
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
