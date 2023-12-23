@@ -60,21 +60,21 @@ def create_wifi_ssid(network_id):
         # Define Wi-Fi SSID parameters
         ssid_params = {
             "number": 1,
-            "name": f"{dashboard.networks.getNetwork(network_id)['name']}-WiFi",
+            "name": "Secure-WiFi",  # Update to a meaningful name
             "enabled": True,
             "authMode": "psk",
             "encryptionMode": "wpa2",
-            "psk": password
+            "psk": password,
+            "minBitrate": 12,  # Recommended: 12 (for 12 Mbps)
+            "bandSelection": "ssid"  # Recommended: "ssid"
         }
 
-        # Use createNetworkWirelessSsid to create the Wi-Fi SSID
-        response = dashboard.wireless.createNetworkWirelessSsid(network_id, **ssid_params)
+        # Use updateNetworkWirelessSsid to create the Wi-Fi SSID
+        response = dashboard.wireless.updateNetworkWirelessSsid(network_id, number=1, **ssid_params)
         print("Wi-Fi SSID created successfully:")
         print(response)
     except meraki.APIError as e:
         print(f"Error creating Wi-Fi SSID: {e}")
-
-
 
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
@@ -93,7 +93,7 @@ if __name__ == "__main__":
         # Create SD-WAN traffic shaping rule using updateNetworkApplianceTrafficShapingRules
         create_sdwan_traffic_shaping_rule(created_network_id)
 
-        # Create Wi-Fi SSID using createNetworkWirelessSsid
+        # Create Wi-Fi SSID using updateNetworkWirelessSsid
         create_wifi_ssid(created_network_id)
     else:
         print("Network creation failed.")
