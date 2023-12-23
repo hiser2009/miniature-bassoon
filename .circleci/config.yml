@@ -86,7 +86,8 @@ jobs:
             pip install --upgrade meraki
 
       - attach_workspace:
-          at: /workspace/project/
+          # at: /home/circleci/project/
+          at: /project/
 
       - run:
           name: Show Networks
