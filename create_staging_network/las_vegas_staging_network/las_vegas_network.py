@@ -68,11 +68,12 @@ def create_wifi_ssid(network_id):
         }
 
         # Use createNetworkWirelessSsid to create the Wi-Fi SSID
-        response = dashboard.wireless.createNetworkWirelessSsid(network_id, **ssid_params)
+        response = dashboard.networks.createNetworkWirelessSsid(network_id, **ssid_params)
         print("Wi-Fi SSID created successfully:")
         print(response)
     except meraki.APIError as e:
         print(f"Error creating Wi-Fi SSID: {e}")
+
 
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
