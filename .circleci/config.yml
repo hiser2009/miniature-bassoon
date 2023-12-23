@@ -64,7 +64,9 @@ jobs:
           paths:
             - created_network_id.txt
 
-
+      - run:
+          name: Show Contents of created_network_id.txt
+          command: cat /workspace/project/created_network_id.txt
 
   delete_staging_env:
     docker:
@@ -81,7 +83,7 @@ jobs:
             pip install --upgrade meraki
 
       - attach_workspace:
-          at: /project/create_staging_network
+          at: /workspace/project/
 
       - run:
           name: Show Networks
