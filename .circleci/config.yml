@@ -83,11 +83,19 @@ jobs:
           command: |
             pip install requests
             pip install meraki
-            pip install --upgrade meraki
+            apt-get update -y
+            apt-get install tree -y
 
       - attach_workspace:
           # at: /home/circleci/project/
-          at: /project/
+          at: /workspace/
+
+      - run:
+          name: Search For created_network_id.txt
+          command: |
+            pwd
+            ls
+            tree
 
       - run:
           name: Show Networks
