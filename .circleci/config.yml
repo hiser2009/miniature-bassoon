@@ -60,7 +60,7 @@ jobs:
             python -c "print('~' * 40)"
 
       - persist_to_workspace:
-          root: ./project/create_staging_network
+          root: .
           paths:
             - created_network_id.txt
 
