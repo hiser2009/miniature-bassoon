@@ -1,5 +1,7 @@
 import os
 import meraki
+import random
+import string
 
 API_KEY = os.getenv('MERAKI_API_KEY')  # Replace with your actual Meraki API key
 ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
@@ -15,8 +17,8 @@ def create_network(org_id, network_name, network_type='combined'):
         network = dashboard.organizations.createOrganizationNetwork(
             org_id,
             name=network_name,
-            productTypes=["appliance", "camera", "cellularGateway", "sensor", "switch", "wireless"],  # Update the values
-            type=network_type  # Specify 'combined' as the type
+            productTypes=["appliance", "camera", "cellularGateway", "sensor", "switch", "wireless"],
+            type=network_type
         )
         network_id = network['id']
         print(f"Network '{network_name}' created successfully. Network ID: {network_id}")
@@ -50,6 +52,27 @@ def create_sdwan_traffic_shaping_rule(network_id):
     except meraki.APIError as e:
         print(f"Error creating SD-WAN traffic shaping rule: {e}")
 
+def create_wifi_ssid(network_id):
+    try:
+        # Generate a random password with 13 characters
+        password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(13))
+
+        # Define Wi-Fi SSID parameters
+        ssid_params = {
+            "number": 1,
+            "name": f"{dashboard.networks.getNetwork(network_id)['name']}-WiFi",
+            "enabled": True,
+            "authMode": "psk",
+            "encryptionMode": "wpa2",
+            "psk": password
+        }
+
+        # Use createNetworkWirelessSsid to create the Wi-Fi SSID
+        response = dashboard.wireless.createNetworkWirelessSsid(network_id, **ssid_params)
+        print("Wi-Fi SSID created successfully:")
+        print(response)
+    except meraki.APIError as e:
+        print(f"Error creating Wi-Fi SSID: {e}")
 
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
@@ -67,5 +90,8 @@ if __name__ == "__main__":
 
         # Create SD-WAN traffic shaping rule using updateNetworkApplianceTrafficShapingRules
         create_sdwan_traffic_shaping_rule(created_network_id)
+
+        # Create Wi-Fi SSID using createNetworkWirelessSsid
+        create_wifi_ssid(created_network_id)
     else:
         print("Network creation failed.")
