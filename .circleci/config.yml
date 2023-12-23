@@ -65,7 +65,6 @@ jobs:
           command: |
             ls
             tree
-            cat /home/circleci/project/created_network_id.txt
 
       - persist_to_workspace:
           root: .
@@ -96,7 +95,7 @@ jobs:
 
       - attach_workspace:
           # at: /home/circleci/project/
-          at: /workspace/
+          at: /project
 
       - run:
           name: Search For created_network_id.txt
