@@ -62,7 +62,7 @@ def create_wifi_ssid(network_id):
             "name": "Secure-WiFi",  # Update to a meaningful name
             "enabled": True,
             "authMode": "psk",
-            "encryptionMode": "wpa2",
+            "encryptionMode": "wpa",
             "psk": password,
             "minBitrate": 12,  # Recommended: 12 (for 12 Mbps)
             "bandSelection": "ssid"  # Recommended: "ssid"
