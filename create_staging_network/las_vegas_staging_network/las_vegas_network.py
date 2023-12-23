@@ -52,20 +52,23 @@ def create_sdwan_traffic_shaping_rule(network_id):
     except meraki.APIError as e:
         print(f"Error creating SD-WAN traffic shaping rule: {e}")
 
-def create_wifi_ssid(network_id):
+def create_wifi_ssid(network_id, network_name):
     try:
         # Generate a random password with 13 characters
         password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(13))
 
+        # Generate Wi-Fi SSID name based on the network name
+        ssid_name = f"{network_name}-WiFi"
+
         # Define Wi-Fi SSID parameters
         ssid_params = {
-            "name": "Secure-WiFi",  # Update to a meaningful name
+            "name": ssid_name,
             "enabled": True,
             "authMode": "psk",
             "encryptionMode": "wpa",
             "psk": password,
             "minBitrate": 12,  # Recommended: 12 (for 12 Mbps)
-            "bandSelection": "5 GHz band only" 
+            "bandSelection": "5 GHz band only"
         }
 
         # Use updateNetworkWirelessSsid to create the Wi-Fi SSID
@@ -94,6 +97,6 @@ if __name__ == "__main__":
         create_sdwan_traffic_shaping_rule(created_network_id)
 
         # Create Wi-Fi SSID using updateNetworkWirelessSsid
-        create_wifi_ssid(created_network_id)
+        create_wifi_ssid(created_network_id, new_network_name)
     else:
         print("Network creation failed.")
