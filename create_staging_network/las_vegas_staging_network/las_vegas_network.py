@@ -65,7 +65,7 @@ def create_wifi_ssid(network_id):
             "encryptionMode": "wpa",
             "psk": password,
             "minBitrate": 12,  # Recommended: 12 (for 12 Mbps)
-            "bandSelection": "ssid"  # Recommended: "ssid"
+            "bandSelection": "5 GHz band only" 
         }
 
         # Use updateNetworkWirelessSsid to create the Wi-Fi SSID
