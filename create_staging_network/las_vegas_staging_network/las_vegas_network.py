@@ -33,8 +33,8 @@ def create_sdwan_traffic_shaping_rule(network_id):
             "rules": [
                 {
                     "definitions": [
-                        {"type": "host", "value": "208.73.144.0/21"},
-                        {"type": "host", "value": "208.89.108.0/22"}
+                        {"type": "ipRange", "value": "208.73.144.0/21"},
+                        {"type": "ipRange", "value": "208.89.108.0/22"}
                     ],
                     "perClientBandwidthLimits": {"settings": "ignore"},
                     "dscpTagValue": 46,
@@ -49,6 +49,7 @@ def create_sdwan_traffic_shaping_rule(network_id):
         print(response)
     except meraki.APIError as e:
         print(f"Error creating SD-WAN traffic shaping rule: {e}")
+
 
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
