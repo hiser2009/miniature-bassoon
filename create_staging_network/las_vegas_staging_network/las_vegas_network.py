@@ -49,15 +49,8 @@ def create_sdwan_traffic_shaping_rule(network_id):
             },
             "dscpTagValue": 46,
             "priority": "high",
-            "defaultRulesEnabled": False,  # Explicitly set defaultRulesEnabled to False
+            "defaultRulesEnabled": True  # Explicitly set defaultRulesEnabled to True
         }
-
-        # Include globalBandwidthLimits only when defaultRulesEnabled is False
-        if not rule_params["defaultRulesEnabled"]:
-            rule_params["globalBandwidthLimits"] = {
-                "limitUp": 0,
-                "limitDown": 0
-            }
 
         # Use updateNetworkApplianceTrafficShaping to create the rule
         response = dashboard.appliance.updateNetworkApplianceTrafficShaping(network_id, rules=[rule_params])
@@ -65,6 +58,7 @@ def create_sdwan_traffic_shaping_rule(network_id):
         print(response)
     except meraki.APIError as e:
         print(f"Error creating SD-WAN traffic shaping rule: {e}")
+
 
 
 
