@@ -59,8 +59,19 @@ def create_sdwan_traffic_shaping_rule(network_id):
     except meraki.APIError as e:
         print(f"Error creating SD-WAN traffic shaping rule: {e}")
 
+    try:
+        # Set uplink bandwidth limits for WAN interfaces
+        uplink_bandwidth_limits = {
+            'wan1': {'limitUp': 1000, 'limitDown': 1000},
+            'wan2': {'limitUp': 1000, 'limitDown': 1000},
+            'cellular': {'limitUp': 1000, 'limitDown': 1000}
+        }
 
-
+        response = dashboard.appliance.updateNetworkApplianceTrafficShapingUplinkBandwidth(network_id, bandwidthLimits=uplink_bandwidth_limits)
+        print("Uplink bandwidth limits set successfully:")
+        print(response)
+    except meraki.APIError as e:
+        print(f"Error setting uplink bandwidth limits: {e}")
 
 if __name__ == "__main__":
     new_network_name = "LasVegas_NV_Branch"  # CREATE A NETWORK NAME
@@ -76,7 +87,7 @@ if __name__ == "__main__":
             file.write(created_network_id)
             print("Network ID written to file.")
 
-        # Create SD-WAN traffic shaping rule
+        # Create SD-WAN traffic shaping rule and set uplink bandwidth limits
         create_sdwan_traffic_shaping_rule(created_network_id)
     else:
         print("Network creation failed.")
