@@ -81,7 +81,7 @@ jobs:
             pip install --upgrade meraki
 
       - attach_workspace:
-          at: /workspace/project/create_staging_network
+          at: /project/create_staging_network
 
       - run:
           name: Show Networks
