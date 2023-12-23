@@ -71,11 +71,6 @@ jobs:
           paths:
             - created_network_id.txt
 
-      - run:
-          name: Show Contents of created_network_id.txt
-          command: |
-            echo "Hello, world!" > workspace/echo-output
-            cat /home/circleci/project/created_network_id.txt
 
   delete_staging_env:
     docker:
