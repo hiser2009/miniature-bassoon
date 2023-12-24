@@ -56,7 +56,7 @@ def create_dhcp_scope(network_id, vlan_id, subnet):
             "defaultGateway": f"{subnet.split('.')[0]}.{subnet.split('.')[1]}.{vlan_id}.1",
             "dnsNameservers": "upstream_dns",
             'dhcpHandling': 'Run a DHCP server',
-            'dhcpLeaseTime': '8 hours',
+            'dhcpLeaseTime': '12 hours',
             'dhcpBootOptionsEnabled': False
         }
 
