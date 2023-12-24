@@ -1,7 +1,6 @@
 version: 2.1
 
 jobs:
-
   build:
     docker:
       - image: cimg/python:3.12.1
@@ -18,27 +17,17 @@ jobs:
   deploy_dev_staging:
     docker:
       - image: cimg/python:3.12.1
+
     steps:
       - checkout
-      # Add steps to deploy to DEV_STAGING
-      # This job will be triggered for branches other than MAIN
+
       - run:
           name: Install Dependencies
           command: |
             pip install requests
             pip install meraki
-
-      # - run:
-      #     name: Show Networks
-      #     command: |
-      #       python show/show_networks.py
-      #       python -c "print('~' * 40)"
-
-      # - run:
-      #     name: Create Networks
-      #     command: |
-      #       python create_network/create_network.py
-      #       python -c "print('~' * 40)"
+            DEBIAN_FRONTEND=noninteractive sudo apt-get update -y
+            DEBIAN_FRONTEND=noninteractive sudo apt-get install tree -y
 
       - run:
           name: Show Networks
@@ -46,78 +35,148 @@ jobs:
             python show/show_networks.py
             python -c "print('~' * 40)"
 
-      # - run:
-      #     name: Delete Networks
-      #     command: |
-      #       python delete_network/delete_network.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Create Networks
+          command: |
+            python create_staging_network/las_vegas_staging_network/las_vegas_network.py
+            python -c "print('~' * 40)"
 
-      # - run:
-      #     name: Show Networks
-      #     command: |
-      #       python show/show_networks.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Show Networks
+          command: |
+            python show/show_networks.py
+            python -c "print('~' * 40)"
+
+      - run:
+          name: Create VLANS & DHCP
+          command: |
+            python create_staging_vlans_dhcp/las_vegas_staging_vlans_dhcp/las_vegas_staging_vlans_dhcp.py
+            python -c "print('~' * 40)"
             
-      # - run:
-      #     name: Show VLANS & DHCP
-      #     command: |
-      #       python show/show_vlans_dhcp.py
-      #       python -c "print('~' * 40)"
-      
-      # - run:
-      #     name: Delete VLANS & DHCP
-      #     command: |
-      #       python delete_vlans_dhcp/delete_vlans_dhcp.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Show VLANS & DHCP
+          command: |
+            python show/show_vlans_dhcp.py
+            python -c "print('~' * 40)"
+
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - created_network_id.txt
+
+
+  delete_staging_env:
+    docker:
+      - image: cimg/python:3.12.1
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install Dependencies
+          command: |
+            pip install requests
+            pip install meraki
+            DEBIAN_FRONTEND=noninteractive sudo apt-get update -y
+            DEBIAN_FRONTEND=noninteractive sudo apt-get install tree -y
+
+      - attach_workspace:
+          at: /home/circleci/project
+
+
+      - run:
+          name: Show Networks
+          command: |
+            python show/show_networks.py
+            python -c "print('~' * 40)"
+            
+      - run:
+          name: Show VLANS & DHCP
+          command: |
+            python show/show_vlans_dhcp.py
+            python -c "print('~' * 40)"
+
+      - run:
+          name: Delete VLANS & DHCP
+          command: |
+            python delete_staging_vlans_dhcp/delete_vlans_dhcp.py
+            python -c "print('~' * 40)"
 
       - run:
           name: Show VLANS & DHCP
           command: |
             python show/show_vlans_dhcp.py
             python -c "print('~' * 40)"
-      
-      # - run:
-      #     name: Create VLANS & DHCP
-      #     command: |
-      #       python create_vlan.py
-      #       python -c "print('~' * 40)"
 
-      # - run:
-      #     name: Show VLANS & DHCP
-      #     command: |
-      #       python vlans_dhcp.py
-      #       python -c "print('~' * 40)"
+      - run:
+          name: Delete Networks
+          command: |
+            python delete_staging_network/delete_network.py
+            python -c "print('~' * 40)"
+
+      - run:
+          name: Show Networks
+          command: |
+            python show/show_networks.py
+            python -c "print('~' * 40)"
 
   deploy_prod:
     docker:
       - image: cimg/python:3.12.1
+
     steps:
       - checkout
-      # Add steps to deploy to PROD
-      # This job will be triggered for the MAIN branch
+
       - run:
           name: Install Dependencies
           command: |
             pip install requests
             pip install meraki
-      - run:
-          name: Create VLANS
-          command: |
-            # python fetch_meraki_networks.py
-            #python .github/scripts/test.py
-            python show_networks.py
-            # python create_vlan.py
+            pip install --upgrade meraki
+            DEBIAN_FRONTEND=noninteractive sudo apt-get update -y
+            DEBIAN_FRONTEND=noninteractive sudo apt-get install tree -y
 
+      - attach_workspace:
+          at: /home/circleci/project
+
+      - run:
+          name: Create Networks
+          command: |
+            python create_production_network/las_vegas_prod_network/las_vegas_network.py
+            python -c "print('~' * 40)"
+      
+      - run:
+          name: Show Networks
+          command: |
+            python show/show_networks.py
+            python -c "print('~' * 40)"
+
+      - run:
+          name: Create VLANS & DHCP
+          command: |
+            python create_production_vlans_dhcp/las_vegas_prod_vlans_dhcp/las_vegas_prod_vlans_dhcp.py
+            python -c "print('~' * 40)"
+
+      - run:
+          name: Show VLANS & DHCP
+          command: |
+            python show/show_vlans_dhcp.py
+            python -c "print('~' * 40)"
 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
-      
       - hold:
           type: approval
           requires:
             - build
+
+      - hold_delete:
+          type: approval
+          requires:
+            - deploy_dev_staging
 
       - build:
           context:
@@ -132,6 +191,15 @@ workflows:
             branches:
               ignore: main  # Ignore the MAIN branch, trigger for other branches
 
+      - delete_staging_env:
+          context:
+            - meraki_stuff
+          requires:
+            - hold_delete
+          filters:
+            branches:
+              ignore: main  # Ignore the MAIN branch, trigger for other branches
+
       - deploy_prod:
           requires:
             - hold
@@ -140,10 +208,3 @@ workflows:
           filters:
             branches:
               only: main  # Trigger only for the MAIN branch
-
-# workflows:
-#   my-workflow:
-#     jobs:
-#       - build:
-#           context:
-#             - meraki_stuff
