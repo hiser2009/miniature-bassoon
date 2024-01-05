@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Create Networks
           command: |
-            python create_staging_network/las_vegas_staging_network/las_vegas_network.py
+            python create_staging_network/boston_staging_network/boston_network.py
             python -c "print('~' * 40)"
 
       - run:
@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Create VLANS & DHCP
           command: |
-            python create_staging_vlans_dhcp/las_vegas_staging_vlans_dhcp/las_vegas_staging_vlans_dhcp.py
+            python create_staging_vlans_dhcp/boston_staging_vlans_dhcp/boston_staging_vlans_dhcp.py
             python -c "print('~' * 40)"
             
       - run:
@@ -143,7 +143,7 @@ jobs:
       - run:
           name: Create Networks
           command: |
-            python create_production_network/las_vegas_prod_network/las_vegas_network.py
+            python create_production_network/boston_prod_network/boston_network.py
             python -c "print('~' * 40)"
       
       - run:
@@ -155,7 +155,7 @@ jobs:
       - run:
           name: Create VLANS & DHCP
           command: |
-            python create_production_vlans_dhcp/las_vegas_prod_vlans_dhcp/las_vegas_prod_vlans_dhcp.py
+            python create_production_vlans_dhcp/boston_prod_vlans_dhcp/boston_prod_vlans_dhcp.py
             python -c "print('~' * 40)"
 
       - run:
