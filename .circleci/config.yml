@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Create Networks
           command: |
-            python create_staging_network/phoenix_staging_network/phoenix_network.py
+            python create_staging_network/jv_staging_network/phoenix_network.py
             python -c "print('~' * 40)"
 
       - run:
@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Create VLANS & DHCP
           command: |
-            python create_staging_vlans_dhcp/phoenix_staging_vlans_dhcp/phoenix_staging_vlans_dhcp.py
+            python create_staging_vlans_dhcp/jv_staging_vlans_dhcp/phoenix_staging_vlans_dhcp.py
             python -c "print('~' * 40)"
             
       - run:
@@ -143,7 +143,7 @@ jobs:
       - run:
           name: Create Networks
           command: |
-            python create_production_network/phoenix_prod_network/phoenix_network.py
+            python create_production_network/jv_prod_network/phoenix_network.py
             python -c "print('~' * 40)"
       
       - run:
@@ -155,7 +155,7 @@ jobs:
       - run:
           name: Create VLANS & DHCP
           command: |
-            python create_production_vlans_dhcp/phoenix_prod_vlans_dhcp/phoenix_prod_vlans_dhcp.py
+            python create_production_vlans_dhcp/jv_prod_vlans_dhcp/phoenix_prod_vlans_dhcp.py
             python -c "print('~' * 40)"
 
       - run:
