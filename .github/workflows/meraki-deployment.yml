@@ -43,15 +43,24 @@ jobs:
           sudo apt-get install tree -y
 
       - name: Print Vars
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           printenv
 
       - name: Show Networks
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           python show/show_networks.py
           python -c "print('~' * 40)"
 
       - name: Create Networks
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           python create_staging_network/pomona_staging_network/pomona_network.py
           python -c "print('~' * 40)"
