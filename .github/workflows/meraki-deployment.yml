@@ -34,7 +34,8 @@ jobs:
         #   MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
           ORG_ID: ${{ secrets.ORG_ID }}
         run: |
-          printenv
+          printenv | grep MERAKI
+          printenv | grep ORG_ID
           python show/show_networks.py
           python -c "print('~' * 40)"
 
