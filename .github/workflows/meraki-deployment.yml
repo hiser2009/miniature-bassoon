@@ -27,6 +27,7 @@ jobs:
           echo $MY_SECRET
           echo $MERAKI_API_KEY
           echo $ORG_ID
+          echo $ORG_ID2
 
     #   - name: Show Networks
     #     env:
