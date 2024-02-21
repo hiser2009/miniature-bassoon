@@ -38,18 +38,18 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: pullRequest } = await github.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number
-            });
-
-            await github.reactions.createForIssue({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              content: 'eyes'
-            })
+            const prNumber = context.payload.pull_request.number;
+            if (prNumber) {
+              await github.reactions.createForIssue({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                content: 'eyes'
+              });
+            } else {
+              core.setFailed('Could not determine pull request number.');
+            }
+          
 
   deploy_dev_staging:
     if: ${{ github.ref != 'refs/heads/main' }}
