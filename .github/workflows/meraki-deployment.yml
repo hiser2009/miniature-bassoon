@@ -121,8 +121,8 @@ jobs:
 
   delete_staging_env:
     if: ${{ github.ref != 'refs/heads/main' }}
-    runs-on: ubuntu-latest
     needs: [deploy_dev_staging, build]
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         hold:
@@ -144,17 +144,18 @@ jobs:
                     issue_number: context.payload.pull_request.number,
                     content: 'eyes'
                   });
-
+                  
         delete:
           steps:
             - name: Checkout code
               uses: actions/checkout@v2
-
-            # Add steps for deleting staging environment
-
-    env:
-      MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
-      ORG_ID: ${{ secrets.ORG_ID }}
+            - name: Show VLANS & DHCP
+              env:
+                  MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+                  ORG_ID: ${{ secrets.ORG_ID }}
+              run: |
+                python show/show_vlans_dhcp.py
+                python -c "print('~' * 40)"
 
 # Define a workflow to trigger the matrix job based on the branch
   delete_staging_env_workflow:
@@ -172,27 +173,7 @@ jobs:
           - name: Checkout code
             uses: actions/checkout@v2
 
-          - name: Approve delete staging environment
-            uses: actions/github-script@v4
-            with:
-              github-token: ${{ secrets.GITHUB_TOKEN }}
-              script: |
-                const { data: workflowRuns } = await github.actions.listRepoWorkflowRuns({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  workflow_id: context.payload.workflow_run.workflow_id,
-                  branch: context.payload.workflow_run.head_branch
-                });
-
-                const deleteStagingEnvRun = workflowRuns.workflow_runs.find(run => run.name === 'delete_staging_env_job');
-
-                if (deleteStagingEnvRun) {
-                  await github.actions.approveWorkflowRun({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    run_id: deleteStagingEnvRun.id
-                  });
-                }
+          # Add steps for deleting staging environment
 
   deploy_prod:
     if: ${{ github.ref == 'refs/heads/main' }}
