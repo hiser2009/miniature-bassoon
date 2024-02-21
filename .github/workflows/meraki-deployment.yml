@@ -123,57 +123,24 @@ jobs:
     if: ${{ github.ref != 'refs/heads/main' }}
     needs: [deploy_dev_staging, build]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        hold:
-          steps:
-            - name: Hold for approval
-              uses: actions/github-script@v4
-              with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
-                script: |
-                  const { data: pullRequest } = await github.pulls.get({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: context.payload.pull_request.number
-                  });
+    steps:
+      - name: Hold for approval
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequest } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
 
-                  await github.reactions.createForIssue({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: context.payload.pull_request.number,
-                    content: 'eyes'
-                  });
-                  
-        delete:
-          steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-            - name: Show VLANS & DHCP
-              env:
-                  MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
-                  ORG_ID: ${{ secrets.ORG_ID }}
-              run: |
-                python show/show_vlans_dhcp.py
-                python -c "print('~' * 40)"
-
-# Define a workflow to trigger the matrix job based on the branch
-  delete_staging_env_workflow:
-    name: Delete Staging Environment Workflow
-    on:
-      workflow_run:
-        workflows: ["Meraki Deployment Pipeline"]
-        types:
-          - completed
-    jobs:
-      delete_staging_env_job:
-        runs-on: ubuntu-latest
-        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.workflow_id == ${{ github.event.workflow_run.target_workflow_id }}
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v2
-
-          # Add steps for deleting staging environment
+            await github.reactions.createForIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              content: 'eyes'
+            });
 
   deploy_prod:
     if: ${{ github.ref == 'refs/heads/main' }}
