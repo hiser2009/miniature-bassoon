@@ -24,7 +24,7 @@ jobs:
         run: echo $MY_SECRET
 
       - name: Show Networks
-        env:
+        env: |
           MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
           ORG_ID: ${{ secrets.ORG_ID }}
         run: |
