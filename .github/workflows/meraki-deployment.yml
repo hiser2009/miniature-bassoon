@@ -32,6 +32,10 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install tree -y
 
+      - name: Print Vars
+        run: |
+          printenv
+
       - name: Show Networks
         run: |
           python show/show_networks.py
