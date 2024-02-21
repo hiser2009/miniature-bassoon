@@ -66,16 +66,25 @@ jobs:
           python -c "print('~' * 40)"
 
       - name: Show Networks
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           python show/show_networks.py
           python -c "print('~' * 40)"
 
       - name: Create VLANS & DHCP
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           python create_staging_vlans_dhcp/pomona_staging_vlans_dhcp/pomona_staging_vlans_dhcp.py
           python -c "print('~' * 40)"
             
       - name: Show VLANS & DHCP
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           python show/show_vlans_dhcp.py
           python -c "print('~' * 40)"
