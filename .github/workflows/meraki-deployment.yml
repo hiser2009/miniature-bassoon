@@ -50,7 +50,6 @@ jobs:
               core.setFailed('Could not determine pull request number.');
             }
           
-
   deploy_dev_staging:
     if: ${{ github.ref != 'refs/heads/main' }}
     runs-on: ubuntu-latest
