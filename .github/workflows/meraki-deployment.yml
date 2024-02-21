@@ -23,6 +23,11 @@ jobs:
           MY_SECRET: ${{ secrets.MERAKI_API_KEY }}
         run: echo $MY_SECRET
 
+      - name: Show Networks
+        run: |
+          python show/show_networks.py
+          python -c "print('~' * 40)"
+
   deploy_dev_staging:
     if: ${{ github.ref != 'refs/heads/main' }}
     runs-on: ubuntu-latest
