@@ -18,24 +18,25 @@ jobs:
           pip install requests
           pip install meraki
 
-      - name: Use a secret
-        env:
-          MY_SECRET: ${{ secrets.MERAKI_API_KEY }}
-          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
-          ORG_ID: ${{ secrets.ORG_ID }}
-        run: |
-          echo $MY_SECRET
-          echo $MERAKI_API_KEY
-          echo $ORG_ID
-          echo $ORG_ID2
-
-    #   - name: Show Networks
+    #   - name: Use a secret
     #     env:
+    #       MY_SECRET: ${{ secrets.MERAKI_API_KEY }}
     #       MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
     #       ORG_ID: ${{ secrets.ORG_ID }}
     #     run: |
-    #       python show/show_networks.py
-    #       python -c "print('~' * 40)"
+    #       echo $MY_SECRET
+    #       echo $MERAKI_API_KEY
+    #       echo $ORG_ID
+    #       echo $ORG_ID2
+
+      - name: Show Networks
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
+        run: |
+          printenv
+          python show/show_networks.py
+          python -c "print('~' * 40)"
 
   deploy_dev_staging:
     if: ${{ github.ref != 'refs/heads/main' }}
