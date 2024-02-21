@@ -8,6 +8,12 @@ ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
 
 dashboard = meraki.DashboardAPI(API_KEY)
 
+def print_environment_variables():
+    for key, value in os.environ.items():
+        print(f"{key}={value}")
+
+print_environment_variables()
+
 def create_network(org_id, network_name, network_type='combined'):
     try:
         if not network_name.startswith('DEV-'):
