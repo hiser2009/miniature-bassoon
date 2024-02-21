@@ -28,9 +28,33 @@ jobs:
           python show/show_networks.py
           python -c "print('~' * 40)"
 
+  approval_deploy_dev_staging:
+    if: ${{ github.ref != 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Approval for deploy_dev_staging
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequest } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+
+            await github.reactions.createForIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              content: 'eyes'
+            })
+
   deploy_dev_staging:
     if: ${{ github.ref != 'refs/heads/main' }}
     runs-on: ubuntu-latest
+    needs: approval_deploy_dev_staging
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -98,52 +122,77 @@ jobs:
   delete_staging_env:
     if: ${{ github.ref != 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    needs: [deploy_dev_staging, build]
+    strategy:
+      matrix:
+        hold:
+          steps:
+            - name: Hold for approval
+              uses: actions/github-script@v4
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                  const { data: pullRequest } = await github.pulls.get({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: context.payload.pull_request.number
+                  });
 
-      - name: Install Dependencies
-        run: |
-          pip install requests
-          pip install meraki
-          sudo apt-get update -y
-          sudo apt-get install tree -y
+                  await github.reactions.createForIssue({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.payload.pull_request.number,
+                    content: 'eyes'
+                  });
 
-      - name: Restore created_network_id.txt
-        uses: actions/download-artifact@v2
-        with:
-          name: created_network_id
-          path: .
+        delete:
+          steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-      - name: Show Networks
-        run: |
-          python show/show_networks.py
-          python -c "print('~' * 40)"
-            
-      - name: Show VLANS & DHCP
-        run: |
-          python show/show_vlans_dhcp.py
-          python -c "print('~' * 40)"
+            # Add steps for deleting staging environment
 
-      - name: Delete VLANS & DHCP
-        run: |
-          python delete_staging_vlans_dhcp/delete_vlans_dhcp.py
-          python -c "print('~' * 40)"
+    env:
+      MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+      ORG_ID: ${{ secrets.ORG_ID }}
 
-      - name: Show VLANS & DHCP
-        run: |
-          python show/show_vlans_dhcp.py
-          python -c "print('~' * 40)"
+# Define a workflow to trigger the matrix job based on the branch
+  delete_staging_env_workflow:
+    name: Delete Staging Environment Workflow
+    on:
+      workflow_run:
+        workflows: ["Meraki Deployment Pipeline"]
+        types:
+          - completed
+    jobs:
+      delete_staging_env_job:
+        runs-on: ubuntu-latest
+        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.workflow_id == ${{ github.event.workflow_run.target_workflow_id }}
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
 
-      - name: Delete Networks
-        run: |
-          python delete_staging_network/delete_network.py
-          python -c "print('~' * 40)"
+          - name: Approve delete staging environment
+            uses: actions/github-script@v4
+            with:
+              github-token: ${{ secrets.GITHUB_TOKEN }}
+              script: |
+                const { data: workflowRuns } = await github.actions.listRepoWorkflowRuns({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: context.payload.workflow_run.workflow_id,
+                  branch: context.payload.workflow_run.head_branch
+                });
 
-      - name: Show Networks
-        run: |
-          python show/show_networks.py
-          python -c "print('~' * 40)"
+                const deleteStagingEnvRun = workflowRuns.workflow_runs.find(run => run.name === 'delete_staging_env_job');
+
+                if (deleteStagingEnvRun) {
+                  await github.actions.approveWorkflowRun({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    run_id: deleteStagingEnvRun.id
+                  });
+                }
 
   deploy_prod:
     if: ${{ github.ref == 'refs/heads/main' }}
