@@ -1,6 +1,9 @@
 import os
 import requests
 
+API_KEY = os.getenv('MERAKI_API_KEY')  # Replace with your actual Meraki API key
+ORG_ID = os.getenv('ORG_ID')  # Replace with your actual Meraki organization ID
+
 def fetch_meraki_networks(api_key, org_id):
     url = f"https://api.meraki.com/api/v0/organizations/{org_id}/networks"
     
