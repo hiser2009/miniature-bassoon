@@ -23,8 +23,6 @@ jobs:
           MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
           ORG_ID: ${{ secrets.ORG_ID }}
         run: |
-          printenv | grep MERAKI_API_KEY
-          printenv | grep ORG_ID
           python show/show_networks.py
           python -c "print('~' * 40)"
 
@@ -65,14 +63,7 @@ jobs:
           pip install meraki
           sudo apt-get update -y
           sudo apt-get install tree -y
-
-      - name: Print Vars
-        env:
-          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
-          ORG_ID: ${{ secrets.ORG_ID }}
-        run: |
-          printenv
-
+          
       - name: Show Networks
         env:
           MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
@@ -158,16 +149,25 @@ jobs:
           sudo apt-get install tree -y
 
       - name: Show Networks
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           python show/show_networks.py
           python -c "print('~' * 40)"
       
       - name: Create VLANS & DHCP
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           python create_production_vlans_dhcp/pomona_prod_vlans_dhcp/pomona_prod_vlans_dhcp.py
           python -c "print('~' * 40)"
 
       - name: Show VLANS & DHCP
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+          ORG_ID: ${{ secrets.ORG_ID }}
         run: |
           python show/show_vlans_dhcp.py
           python -c "print('~' * 40)"
