@@ -27,7 +27,7 @@ jobs:
           python -c "print('~' * 40)"
 
   approval_deploy_dev_staging:
-    if: ${{ github.ref != 'refs/heads/main' }}
+    if: ${{ github.event_name == 'pull_request' && github.ref != 'refs/heads/main' }}
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -36,8 +36,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = context.payload.pull_request.number;
-            if (prNumber) {
+            if (context.payload.pull_request) {
+              const prNumber = context.payload.pull_request.number;
               await github.reactions.createForIssue({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -47,7 +47,7 @@ jobs:
             } else {
               core.setFailed('Could not determine pull request number.');
             }
-          
+
           
   deploy_dev_staging:
     if: ${{ github.ref != 'refs/heads/main' }}
